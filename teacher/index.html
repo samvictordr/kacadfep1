@@ -9,6 +9,8 @@
     <link rel="apple-touch-icon" href="./icons/icon-192.svg">
     <title>Academy - Teacher</title>
     <link rel="manifest" href="manifest.json">
+    <!-- QR Code Scanner Library -->
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
     <style>
         * {
             box-sizing: border-box;
@@ -224,11 +226,65 @@
             overflow: hidden;
             margin-bottom: 16px;
             position: relative;
+            min-height: 280px;
         }
         
         .scanner-container video {
             width: 100%;
             display: block;
+        }
+        
+        #qr-reader {
+            width: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        #qr-reader video {
+            border-radius: 12px;
+        }
+        
+        .scanner-toggle {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        
+        .scanner-toggle button {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            background: white;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .scanner-toggle button.active {
+            border-color: #2196F3;
+            background: #2196F3;
+            color: white;
+        }
+        
+        .scanner-toggle button:not(.active):hover {
+            border-color: #2196F3;
+            background: #e3f2fd;
+        }
+        
+        .camera-permission {
+            background: #fff3e0;
+            border: 1px solid #ffcc02;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        
+        .camera-permission p {
+            margin-bottom: 10px;
+            color: #e65100;
         }
         
         .scanner-overlay {
@@ -387,11 +443,26 @@
                 <div id="scan-error" class="error-message hidden"></div>
                 <div id="scan-success" class="success-message hidden"></div>
                 
-                <div class="form-group">
-                    <label for="qr-token">Student QR Token</label>
-                    <input type="text" id="qr-token" placeholder="Scan or enter QR token">
+                <!-- Scanner Mode Toggle -->
+                <div class="scanner-toggle">
+                    <button id="btn-camera-mode" class="active" onclick="switchToCamera()">📷 Camera</button>
+                    <button id="btn-manual-mode" onclick="switchToManual()">⌨️ Manual</button>
                 </div>
-                <button class="btn btn-success" onclick="scanAttendance()">✓ Record Attendance</button>
+                
+                <!-- Camera Scanner -->
+                <div id="camera-scanner">
+                    <div id="qr-reader" class="scanner-container"></div>
+                    <p style="text-align: center; color: #666; font-size: 0.85rem;">Point camera at student's QR code</p>
+                </div>
+                
+                <!-- Manual Entry (hidden by default) -->
+                <div id="manual-entry" class="hidden">
+                    <div class="form-group">
+                        <label for="qr-token">Student QR Token</label>
+                        <input type="text" id="qr-token" placeholder="Enter QR token manually">
+                    </div>
+                    <button class="btn btn-success" onclick="scanAttendance()">✓ Record Attendance</button>
+                </div>
                 
                 <h3 style="margin-top: 20px; margin-bottom: 10px;">Attendance List</h3>
                 <div id="attendance-list" class="attendance-list">
@@ -670,6 +741,167 @@
                 scanAttendance();
             }
         });
+        
+        // ===== QR CAMERA SCANNER =====
+        let html5QrcodeScanner = null;
+        let scannerActive = false;
+        
+        function switchToCamera() {
+            document.getElementById('btn-camera-mode').classList.add('active');
+            document.getElementById('btn-manual-mode').classList.remove('active');
+            document.getElementById('camera-scanner').classList.remove('hidden');
+            document.getElementById('manual-entry').classList.add('hidden');
+            startScanner();
+        }
+        
+        function switchToManual() {
+            document.getElementById('btn-manual-mode').classList.add('active');
+            document.getElementById('btn-camera-mode').classList.remove('active');
+            document.getElementById('manual-entry').classList.remove('hidden');
+            document.getElementById('camera-scanner').classList.add('hidden');
+            stopScanner();
+        }
+        
+        async function startScanner() {
+            if (scannerActive) return;
+            
+            try {
+                html5QrcodeScanner = new Html5Qrcode("qr-reader");
+                
+                const config = {
+                    fps: 10,
+                    qrbox: { width: 250, height: 250 },
+                    aspectRatio: 1.0
+                };
+                
+                await html5QrcodeScanner.start(
+                    { facingMode: "environment" },
+                    config,
+                    onScanSuccess,
+                    onScanFailure
+                );
+                
+                scannerActive = true;
+                console.log('[Scanner] Camera started');
+                
+            } catch (err) {
+                console.error('[Scanner] Error starting camera:', err);
+                // Show manual entry if camera fails
+                document.getElementById('camera-scanner').innerHTML = `
+                    <div class="camera-permission">
+                        <p>📷 Camera access required</p>
+                        <p style="font-size: 0.85rem; color: #666;">Please allow camera access or use manual entry</p>
+                        <button class="btn btn-secondary" onclick="switchToManual()" style="margin-top: 10px;">Use Manual Entry</button>
+                    </div>
+                `;
+            }
+        }
+        
+        function stopScanner() {
+            if (html5QrcodeScanner && scannerActive) {
+                html5QrcodeScanner.stop().then(() => {
+                    scannerActive = false;
+                    console.log('[Scanner] Camera stopped');
+                }).catch(err => {
+                    console.error('[Scanner] Error stopping camera:', err);
+                });
+            }
+        }
+        
+        async function onScanSuccess(decodedText, decodedResult) {
+            console.log('[Scanner] QR Code detected:', decodedText);
+            
+            // Pause scanner to prevent multiple scans
+            if (html5QrcodeScanner) {
+                await html5QrcodeScanner.pause();
+            }
+            
+            // Process the scanned QR code
+            await processScannedQR(decodedText);
+            
+            // Resume scanner after a delay
+            setTimeout(() => {
+                if (html5QrcodeScanner && scannerActive) {
+                    html5QrcodeScanner.resume();
+                }
+            }, 2000);
+        }
+        
+        function onScanFailure(error) {
+            // Ignore scan failures (no QR code in view)
+        }
+        
+        async function processScannedQR(qrToken) {
+            const errorEl = document.getElementById('scan-error');
+            const successEl = document.getElementById('scan-success');
+            
+            if (!currentSession) {
+                errorEl.textContent = 'No active session';
+                errorEl.classList.remove('hidden');
+                return;
+            }
+            
+            try {
+                errorEl.classList.add('hidden');
+                successEl.classList.add('hidden');
+                
+                const data = await apiCall('/teacher/attendance/scan', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        qr_token: qrToken,
+                        session_id: currentSession.session_id
+                    })
+                });
+                
+                // Add to records
+                attendanceRecords.push(data);
+                updateAttendanceList();
+                
+                // Show success with vibration feedback
+                if (navigator.vibrate) {
+                    navigator.vibrate(200);
+                }
+                
+                successEl.textContent = `✓ ${data.student_name} marked present`;
+                successEl.classList.remove('hidden');
+                
+                // Update counter
+                document.getElementById('present-count').textContent = attendanceRecords.length;
+                
+                // Auto-hide success message
+                setTimeout(() => {
+                    successEl.classList.add('hidden');
+                }, 3000);
+                
+            } catch (error) {
+                // Vibrate for error
+                if (navigator.vibrate) {
+                    navigator.vibrate([100, 50, 100]);
+                }
+                errorEl.textContent = error.message;
+                errorEl.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    errorEl.classList.add('hidden');
+                }, 3000);
+            }
+        }
+        
+        // Start scanner when session becomes active
+        const originalStartSession = startSession;
+        startSession = async function() {
+            await originalStartSession.apply(this, arguments);
+            if (currentSession && document.getElementById('btn-camera-mode').classList.contains('active')) {
+                setTimeout(startScanner, 500);
+            }
+        };
+        
+        // Stop scanner on logout
+        const originalLogout = logout;
+        logout = function() {
+            stopScanner();
+            originalLogout.apply(this, arguments);
+        };
         
         // ===== OFFLINE DETECTION =====
         function updateOnlineStatus() {
