@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#667eea">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="./icons/icon-192.svg">
+    <title>Academy - Student</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            padding: 20px 0;
+        }
+        
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+        
+        .card h2 {
+            font-size: 1.2rem;
+            margin-bottom: 16px;
+            color: #333;
+        }
+        
+        .form-group {
+            margin-bottom: 16px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #555;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.1s, box-shadow 0.2s;
+        }
+        
+        .btn:active {
+            transform: scale(0.98);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #f5f5f5;
+            color: #333;
+        }
+        
+        .qr-container {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .qr-code {
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            display: inline-block;
+            margin-bottom: 16px;
+        }
+        
+        .qr-code img, .qr-code svg, .qr-code canvas {
+            display: block;
+        }
+        
+        .balance-display {
+            text-align: center;
+            padding: 30px 20px;
+        }
+        
+        .balance-amount {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #4CAF50;
+        }
+        
+        .balance-label {
+            font-size: 0.9rem;
+            color: #888;
+            margin-top: 5px;
+        }
+        
+        .tab-bar {
+            display: flex;
+            background: white;
+            border-radius: 12px;
+            padding: 4px;
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .screen {
+            display: none;
+        }
+        
+        .screen.active {
+            display: block;
+        }
+        
+        .error-message {
+            background: #ffebee;
+            color: #c62828;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-size: 0.9rem;
+        }
+        
+        .success-message {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-size: 0.9rem;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        
+        .info-label {
+            color: #888;
+        }
+        
+        .info-value {
+            font-weight: 600;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        .logout-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+        
+        /* Offline Banner */
+        .offline-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #f44336;
+            color: white;
+            text-align: center;
+            padding: 8px;
+            font-size: 0.85rem;
+            z-index: 9999;
+            display: none;
+        }
+        
+        .offline-banner.visible {
+            display: block;
+        }
+        
+        body.offline {
+            padding-top: 36px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Offline Banner -->
+    <div id="offline-banner" class="offline-banner">
+        ⚠️ You are offline. Some features may not work.
+    </div>
+    
+    <!-- Login Screen -->
+    <div id="login-screen" class="screen active">
+        <div class="container">
+            <div class="header">
+                <h1>🎓 Academy</h1>
+                <p>Student Portal</p>
+            </div>
+            
+            <div class="card">
+                <h2>Sign In</h2>
+                <div id="login-error" class="error-message hidden"></div>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" required autocomplete="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" required autocomplete="current-password">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Sign In</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App Screen -->
+    <div id="main-screen" class="screen">
+        <button class="logout-btn" onclick="logout()">Logout</button>
+        <div class="container">
+            <div class="header">
+                <h1>Welcome, <span id="user-name">Student</span></h1>
+                <p id="current-date"></p>
+            </div>
+            
+            <div class="tab-bar">
+                <div class="tab active" onclick="showTab('attendance')">Attendance</div>
+                <div class="tab" onclick="showTab('store')">Store</div>
+                <div class="tab" onclick="showTab('balance')">Balance</div>
+            </div>
+            
+            <!-- Attendance Tab -->
+            <div id="attendance-tab" class="card">
+                <h2>📋 Attendance QR</h2>
+                <div id="attendance-error" class="error-message hidden"></div>
+                <div id="attendance-qr" class="qr-container">
+                    <p>Loading QR code...</p>
+                </div>
+                <button class="btn btn-secondary" onclick="refreshAttendanceQR()">Refresh QR</button>
+            </div>
+            
+            <!-- Store Tab -->
+            <div id="store-tab" class="card hidden">
+                <h2>🛒 Store QR</h2>
+                <div id="store-error" class="error-message hidden"></div>
+                <div id="store-qr" class="qr-container">
+                    <p>Loading QR code...</p>
+                </div>
+            </div>
+            
+            <!-- Balance Tab -->
+            <div id="balance-tab" class="card hidden">
+                <h2>💰 Today's Balance</h2>
+                <div id="balance-error" class="error-message hidden"></div>
+                <div id="balance-info" class="balance-display">
+                    <p>Loading...</p>
+                </div>
+                <button class="btn btn-secondary" onclick="refreshBalance()">Refresh</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- QR Code Library - using qrcodejs which has better browser support -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    
+    <script>
+        // Configuration
+        // Use localhost for development, production API for deployed frontend
+        const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:8000'
+            : 'https://kacadpocp1.onrender.com';
+        
+        // State
+        let authToken = localStorage.getItem('authToken');
+        let userData = JSON.parse(localStorage.getItem('userData') || 'null');
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            if (authToken && userData) {
+                showMainScreen();
+            }
+            updateDate();
+        });
+        
+        function updateDate() {
+            const now = new Date();
+            document.getElementById('current-date').textContent = now.toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+        
+        // API Helper
+        async function apiCall(endpoint, options = {}) {
+            const headers = {
+                'Content-Type': 'application/json',
+                ...options.headers
+            };
+            
+            if (authToken) {
+                headers['Authorization'] = `Bearer ${authToken}`;
+            }
+            
+            let response;
+            try {
+                response = await fetch(`${API_BASE}${endpoint}`, {
+                    ...options,
+                    headers
+                });
+            } catch (error) {
+                // Network error (CORS, DNS, offline, timeout, etc.)
+                throw new Error('Network error. Please check your connection.');
+            }
+            
+            if (response.status === 401 && authToken) {
+                // Only logout if we were logged in (session expired)
+                // Don't logout for failed login attempts
+                logout();
+                throw new Error('Session expired');
+            }
+            
+            let data;
+            try {
+                data = await response.json();
+            } catch (error) {
+                throw new Error('Invalid response from server');
+            }
+            
+            if (!response.ok) {
+                throw new Error(data.detail || 'Request failed');
+            }
+            
+            return data;
+        }
+        
+        // Login
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorEl = document.getElementById('login-error');
+            
+            try {
+                errorEl.classList.add('hidden');
+                
+                const data = await apiCall('/auth/login', {
+                    method: 'POST',
+                    body: JSON.stringify({ email, password })
+                });
+                
+                if (data.role !== 'student') {
+                    throw new Error('This app is for students only');
+                }
+                
+                authToken = data.access_token;
+                userData = data;
+                
+                localStorage.setItem('authToken', authToken);
+                localStorage.setItem('userData', JSON.stringify(userData));
+                
+                showMainScreen();
+            } catch (error) {
+                errorEl.textContent = error.message;
+                errorEl.classList.remove('hidden');
+            }
+        });
+        
+        function showMainScreen() {
+            document.getElementById('login-screen').classList.remove('active');
+            document.getElementById('main-screen').classList.add('active');
+            document.getElementById('user-name').textContent = userData.name;
+            
+            refreshAttendanceQR();
+            refreshBalance();
+        }
+        
+        function logout() {
+            authToken = null;
+            userData = null;
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('userData');
+            
+            document.getElementById('main-screen').classList.remove('active');
+            document.getElementById('login-screen').classList.add('active');
+        }
+        
+        // Tab Navigation
+        function showTab(tabName) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.card').forEach(c => c.classList.add('hidden'));
+            
+            event.target.classList.add('active');
+            document.getElementById(`${tabName}-tab`).classList.remove('hidden');
+            
+            if (tabName === 'store') {
+                refreshStoreQR();
+            } else if (tabName === 'balance') {
+                refreshBalance();
+            }
+        }
+        
+        // Attendance QR
+        async function refreshAttendanceQR() {
+            const container = document.getElementById('attendance-qr');
+            const errorEl = document.getElementById('attendance-error');
+            
+            try {
+                errorEl.classList.add('hidden');
+                container.innerHTML = '<p>Generating QR code...</p>';
+                
+                const data = await apiCall('/student/attendance-qr');
+                
+                // Clear and create structure
+                container.innerHTML = '<div class="qr-code" id="attendance-qr-code"></div>';
+                
+                new QRCode(document.getElementById('attendance-qr-code'), {
+                    text: data.qr_token,
+                    width: 200,
+                    height: 200,
+                    colorDark: '#000000',
+                    colorLight: '#ffffff',
+                    correctLevel: QRCode.CorrectLevel.M
+                });
+                
+                // Append expiry text without destroying QR code
+                const expires = new Date(data.expires_at);
+                const expiryP = document.createElement('p');
+                expiryP.style.cssText = 'color:#888;font-size:0.85rem;margin-top:10px;';
+                expiryP.textContent = `Valid until ${expires.toLocaleDateString()} ${expires.toLocaleTimeString()}`;
+                container.appendChild(expiryP);
+                
+            } catch (error) {
+                errorEl.textContent = error.message;
+                errorEl.classList.remove('hidden');
+                container.innerHTML = '<p style="color:#999;">Could not generate QR code</p>';
+            }
+        }
+        
+        // Store QR
+        async function refreshStoreQR() {
+            const container = document.getElementById('store-qr');
+            const errorEl = document.getElementById('store-error');
+            
+            try {
+                errorEl.classList.add('hidden');
+                container.innerHTML = '<p>Generating QR code...</p>';
+                
+                const data = await apiCall('/student/store-qr');
+                
+                // Clear and create structure
+                container.innerHTML = '<div class="qr-code" id="store-qr-code"></div>';
+                
+                // QR contains student_id for store to scan
+                new QRCode(document.getElementById('store-qr-code'), {
+                    text: data.student_id,
+                    width: 200,
+                    height: 200,
+                    colorDark: '#000000',
+                    colorLight: '#ffffff',
+                    correctLevel: QRCode.CorrectLevel.M
+                });
+                
+                // Append balance text without destroying QR code
+                const balance = parseFloat(data.balance);
+                const balanceP = document.createElement('p');
+                balanceP.style.cssText = 'font-size:1.5rem;font-weight:700;color:#4CAF50;margin-top:10px;';
+                balanceP.textContent = `Balance: $${balance.toFixed(2)}`;
+                container.appendChild(balanceP);
+                
+            } catch (error) {
+                errorEl.textContent = error.message;
+                errorEl.classList.remove('hidden');
+                container.innerHTML = '<p style="color:#999;">Could not generate QR code</p>';
+            }
+        }
+        
+        // Balance
+        async function refreshBalance() {
+            const container = document.getElementById('balance-info');
+            const errorEl = document.getElementById('balance-error');
+            
+            try {
+                errorEl.classList.add('hidden');
+                container.innerHTML = '<p>Loading balance...</p>';
+                
+                const data = await apiCall('/student/balance');
+                
+                // Parse string values to numbers
+                const remaining = parseFloat(data.remaining);
+                const baseAmount = parseFloat(data.base_amount);
+                const bonusAmount = parseFloat(data.bonus_amount);
+                const spentToday = parseFloat(data.spent_today);
+                
+                container.innerHTML = `
+                    <div class="balance-amount">$${remaining.toFixed(2)}</div>
+                    <div class="balance-label">Available Today</div>
+                    <div style="margin-top:20px;">
+                        <div class="info-row">
+                            <span class="info-label">Base Allowance</span>
+                            <span class="info-value">$${baseAmount.toFixed(2)}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Bonus</span>
+                            <span class="info-value">$${bonusAmount.toFixed(2)}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Spent Today</span>
+                            <span class="info-value" style="color:#e53935;">-$${spentToday.toFixed(2)}</span>
+                        </div>
+                    </div>
+                `;
+                
+            } catch (error) {
+                errorEl.textContent = error.message;
+                errorEl.classList.remove('hidden');
+                container.innerHTML = '<p style="color:#999;">Could not load balance</p>';
+            }
+        }
+        
+        // ===== OFFLINE DETECTION =====
+        function updateOnlineStatus() {
+            const banner = document.getElementById('offline-banner');
+            if (navigator.onLine) {
+                banner.classList.remove('visible');
+                document.body.classList.remove('offline');
+            } else {
+                banner.classList.add('visible');
+                document.body.classList.add('offline');
+            }
+        }
+        
+        window.addEventListener('online', updateOnlineStatus);
+        window.addEventListener('offline', updateOnlineStatus);
+        updateOnlineStatus();
+        
+        // ===== SERVICE WORKER REGISTRATION =====
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js')
+                .then((registration) => {
+                    console.log('[PWA] Service Worker registered:', registration.scope);
+                })
+                .catch((error) => {
+                    console.log('[PWA] Service Worker registration failed:', error);
+                });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#1a1a2e">
+    <meta name="description" content="Academy Program - Attendance & Allowance Management System">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Academy Program</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .logo {
+            font-size: 4rem;
+            margin-bottom: 10px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.8;
+            margin-bottom: 40px;
+        }
+        
+        .apps-grid {
+            display: grid;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .app-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            text-decoration: none;
+            color: white;
+            transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .app-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .app-card:active {
+            transform: scale(0.98);
+        }
+        
+        .app-icon {
+            font-size: 3rem;
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 16px;
+            flex-shrink: 0;
+        }
+        
+        .app-card.student .app-icon {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .app-card.teacher .app-icon {
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+        }
+        
+        .app-card.store .app-icon {
+            background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
+        }
+        
+        .app-info {
+            text-align: left;
+        }
+        
+        .app-name {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .app-desc {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        
+        .footer {
+            font-size: 0.85rem;
+            opacity: 0.5;
+        }
+        
+        .footer a {
+            color: inherit;
+            text-decoration: underline;
+        }
+        
+        @media (min-width: 600px) {
+            .apps-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">🎓</div>
+        <h1>Academy Program</h1>
+        <p class="subtitle">Attendance & Allowance Management System</p>
+        
+        <div class="apps-grid">
+            <a href="./student/" class="app-card student">
+                <div class="app-icon">📱</div>
+                <div class="app-info">
+                    <div class="app-name">Student App</div>
+                    <div class="app-desc">View attendance QR, check balance, make purchases</div>
+                </div>
+            </a>
+            
+            <a href="./teacher/" class="app-card teacher">
+                <div class="app-icon">📋</div>
+                <div class="app-info">
+                    <div class="app-name">Teacher App</div>
+                    <div class="app-desc">Manage attendance sessions, scan student QR codes</div>
+                </div>
+            </a>
+            
+            <a href="./store/" class="app-card store">
+                <div class="app-icon">🏪</div>
+                <div class="app-info">
+                    <div class="app-name">Store App</div>
+                    <div class="app-desc">Process student purchases, view balances</div>
+                </div>
+            </a>
+        </div>
+        
+        <p class="footer">
+            Academy Program v1.0 &middot; 
+            <a href="https://kacadpocp1.onrender.com/health" target="_blank">API Status</a>
+        </p>
+    </div>
+</body>
+</html>

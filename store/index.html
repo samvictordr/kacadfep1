@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#FF9800">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="./icons/icon-192.svg">
+    <title>Academy - Store</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            padding: 20px 0;
+        }
+        
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+        
+        .card h2 {
+            font-size: 1.2rem;
+            margin-bottom: 16px;
+            color: #333;
+        }
+        
+        .form-group {
+            margin-bottom: 16px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #555;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #FF9800;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.1s, box-shadow 0.2s;
+            margin-bottom: 10px;
+        }
+        
+        .btn:active {
+            transform: scale(0.98);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
+            color: white;
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #4CAF50 0%, #388E3C 100%);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #f5f5f5;
+            color: #333;
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+            color: white;
+        }
+        
+        .screen {
+            display: none;
+        }
+        
+        .screen.active {
+            display: block;
+        }
+        
+        .error-message {
+            background: #ffebee;
+            color: #c62828;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-size: 0.9rem;
+        }
+        
+        .success-message {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-size: 0.9rem;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        .logout-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+        
+        .student-info {
+            text-align: center;
+            padding: 20px;
+            background: #fff8e1;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .student-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .student-program {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        
+        .student-balance {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #4CAF50;
+        }
+        
+        .student-balance.low {
+            color: #f44336;
+        }
+        
+        .balance-label {
+            font-size: 0.85rem;
+            color: #888;
+        }
+        
+        .amount-input {
+            font-size: 2rem !important;
+            text-align: center;
+            font-weight: 700;
+        }
+        
+        .quick-amounts {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        
+        .quick-amount {
+            flex: 1;
+            min-width: 70px;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            background: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .quick-amount:hover {
+            border-color: #FF9800;
+            background: #fff8e1;
+        }
+        
+        .quick-amount.selected {
+            border-color: #FF9800;
+            background: #FF9800;
+            color: white;
+        }
+        
+        .transaction-list {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .transaction-item:last-child {
+            border-bottom: none;
+        }
+        
+        .transaction-amount {
+            font-weight: 600;
+            color: #f44336;
+        }
+        
+        .transaction-time {
+            font-size: 0.85rem;
+            color: #888;
+        }
+        
+        .keypad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        
+        .keypad button {
+            padding: 20px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            background: #f5f5f5;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .keypad button:hover {
+            background: #e0e0e0;
+        }
+        
+        .keypad button:active {
+            background: #FF9800;
+            color: white;
+        }
+        
+        .keypad .key-clear {
+            background: #ffebee;
+            color: #f44336;
+        }
+        
+        .keypad .key-backspace {
+            background: #e3f2fd;
+            color: #1976D2;
+        }
+        
+        /* Offline Banner */
+        .offline-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #f44336;
+            color: white;
+            text-align: center;
+            padding: 8px;
+            font-size: 0.85rem;
+            z-index: 9999;
+            display: none;
+        }
+        
+        .offline-banner.visible {
+            display: block;
+        }
+        
+        body.offline {
+            padding-top: 36px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Offline Banner -->
+    <div id="offline-banner" class="offline-banner">
+        ⚠️ You are offline. Transactions are disabled.
+    </div>
+    
+    <!-- Login Screen -->
+    <div id="login-screen" class="screen active">
+        <div class="container">
+            <div class="header">
+                <h1>🏪 Academy Store</h1>
+                <p>Staff Portal</p>
+            </div>
+            
+            <div class="card">
+                <h2>Sign In</h2>
+                <div id="login-error" class="error-message hidden"></div>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" required autocomplete="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" required autocomplete="current-password">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Sign In</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Screen - Scan -->
+    <div id="main-screen" class="screen">
+        <button class="logout-btn" onclick="logout()">Logout</button>
+        <div class="container">
+            <div class="header">
+                <h1>🏪 Store</h1>
+                <p id="current-date"></p>
+            </div>
+            
+            <!-- Scan Card -->
+            <div id="scan-card" class="card">
+                <h2>📱 Scan Student</h2>
+                <div id="scan-error" class="error-message hidden"></div>
+                <div class="form-group">
+                    <label for="student-id">Student ID</label>
+                    <input type="text" id="student-id" placeholder="Scan QR or enter Student ID">
+                </div>
+                <button class="btn btn-primary" onclick="scanStudent()">Look Up Student</button>
+            </div>
+            
+            <!-- Charge Card (hidden until scan) -->
+            <div id="charge-card" class="card hidden">
+                <h2>💳 Charge Purchase</h2>
+                
+                <div id="student-info" class="student-info">
+                    <div class="student-name" id="display-name">-</div>
+                    <div class="student-program" id="display-program">-</div>
+                    <div class="student-balance" id="display-balance">$0.00</div>
+                    <div class="balance-label">Available Balance</div>
+                </div>
+                
+                <div id="charge-error" class="error-message hidden"></div>
+                <div id="charge-success" class="success-message hidden"></div>
+                
+                <div class="form-group">
+                    <label>Amount to Charge</label>
+                    <input type="text" id="charge-amount" class="amount-input" value="0.00" readonly>
+                </div>
+                
+                <div class="quick-amounts">
+                    <button class="quick-amount" onclick="setAmount(5)">$5</button>
+                    <button class="quick-amount" onclick="setAmount(10)">$10</button>
+                    <button class="quick-amount" onclick="setAmount(15)">$15</button>
+                    <button class="quick-amount" onclick="setAmount(20)">$20</button>
+                </div>
+                
+                <div class="keypad">
+                    <button onclick="addDigit('1')">1</button>
+                    <button onclick="addDigit('2')">2</button>
+                    <button onclick="addDigit('3')">3</button>
+                    <button onclick="addDigit('4')">4</button>
+                    <button onclick="addDigit('5')">5</button>
+                    <button onclick="addDigit('6')">6</button>
+                    <button onclick="addDigit('7')">7</button>
+                    <button onclick="addDigit('8')">8</button>
+                    <button onclick="addDigit('9')">9</button>
+                    <button class="key-clear" onclick="clearAmount()">C</button>
+                    <button onclick="addDigit('0')">0</button>
+                    <button class="key-backspace" onclick="backspace()">←</button>
+                </div>
+                
+                <button class="btn btn-success" onclick="chargeStudent()">✓ Charge Purchase</button>
+                <button class="btn btn-secondary" onclick="cancelCharge()">Cancel</button>
+            </div>
+            
+            <!-- Recent Transactions -->
+            <div class="card">
+                <h2>📋 Recent Transactions</h2>
+                <div id="transaction-list" class="transaction-list">
+                    <p style="color: #999; text-align: center;">No transactions yet</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        // Use localhost for development, production API for deployed frontend
+        const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:8000'
+            : 'https://kacadpocp1.onrender.com';
+        
+        // State
+        let authToken = localStorage.getItem('authToken');
+        let userData = JSON.parse(localStorage.getItem('userData') || 'null');
+        let currentStudent = null;
+        let chargeAmountCents = 0;
+        let recentTransactions = [];
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            if (authToken && userData) {
+                showMainScreen();
+            }
+            updateDate();
+        });
+        
+        function updateDate() {
+            const now = new Date();
+            document.getElementById('current-date').textContent = now.toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+        
+        // API Helper
+        async function apiCall(endpoint, options = {}) {
+            const headers = {
+                'Content-Type': 'application/json',
+                ...options.headers
+            };
+            
+            if (authToken) {
+                headers['Authorization'] = `Bearer ${authToken}`;
+            }
+            
+            let response;
+            try {
+                response = await fetch(`${API_BASE}${endpoint}`, {
+                    ...options,
+                    headers
+                });
+            } catch (error) {
+                // Network error (CORS, DNS, offline, timeout, etc.)
+                throw new Error('Network error. Please check your connection.');
+            }
+            
+            if (response.status === 401 && authToken) {
+                // Only logout if we were logged in (session expired)
+                // Don't logout for failed login attempts
+                logout();
+                throw new Error('Session expired');
+            }
+            
+            let data;
+            try {
+                data = await response.json();
+            } catch (error) {
+                throw new Error('Invalid response from server');
+            }
+            
+            if (!response.ok) {
+                throw new Error(data.detail || 'Request failed');
+            }
+            
+            return data;
+        }
+        
+        // Login
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorEl = document.getElementById('login-error');
+            
+            try {
+                errorEl.classList.add('hidden');
+                
+                const data = await apiCall('/auth/login', {
+                    method: 'POST',
+                    body: JSON.stringify({ email, password })
+                });
+                
+                if (data.role !== 'store') {
+                    throw new Error('This app is for store staff only');
+                }
+                
+                authToken = data.access_token;
+                userData = data;
+                
+                localStorage.setItem('authToken', authToken);
+                localStorage.setItem('userData', JSON.stringify(userData));
+                
+                showMainScreen();
+            } catch (error) {
+                errorEl.textContent = error.message;
+                errorEl.classList.remove('hidden');
+            }
+        });
+        
+        function showMainScreen() {
+            document.getElementById('login-screen').classList.remove('active');
+            document.getElementById('main-screen').classList.add('active');
+        }
+        
+        function logout() {
+            authToken = null;
+            userData = null;
+            currentStudent = null;
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('userData');
+            
+            document.getElementById('main-screen').classList.remove('active');
+            document.getElementById('login-screen').classList.add('active');
+        }
+        
+        // Scan Student
+        async function scanStudent() {
+            const studentId = document.getElementById('student-id').value;
+            const errorEl = document.getElementById('scan-error');
+            
+            if (!studentId) {
+                errorEl.textContent = 'Please enter a student ID';
+                errorEl.classList.remove('hidden');
+                return;
+            }
+            
+            try {
+                errorEl.classList.add('hidden');
+                
+                const data = await apiCall('/store/scan', {
+                    method: 'POST',
+                    body: JSON.stringify({ student_id: studentId })
+                });
+                
+                currentStudent = data;
+                currentStudent.balance = parseFloat(data.balance);
+                
+                document.getElementById('display-name').textContent = data.student_name;
+                document.getElementById('display-program').textContent = data.program_name;
+                
+                const balanceEl = document.getElementById('display-balance');
+                balanceEl.textContent = `$${currentStudent.balance.toFixed(2)}`;
+                balanceEl.classList.toggle('low', currentStudent.balance < 10);
+                
+                document.getElementById('scan-card').classList.add('hidden');
+                document.getElementById('charge-card').classList.remove('hidden');
+                
+                chargeAmountCents = 0;
+                updateAmountDisplay();
+                
+            } catch (error) {
+                errorEl.textContent = error.message;
+                errorEl.classList.remove('hidden');
+            }
+        }
+        
+        // Amount handling
+        function setAmount(amount) {
+            chargeAmountCents = amount * 100;
+            updateAmountDisplay();
+            
+            document.querySelectorAll('.quick-amount').forEach(btn => {
+                btn.classList.remove('selected');
+                if (parseInt(btn.textContent.replace('$', '')) === amount) {
+                    btn.classList.add('selected');
+                }
+            });
+        }
+        
+        function addDigit(digit) {
+            chargeAmountCents = chargeAmountCents * 10 + parseInt(digit);
+            if (chargeAmountCents > 99999) chargeAmountCents = 99999; // Max $999.99
+            updateAmountDisplay();
+            clearQuickSelection();
+        }
+        
+        function backspace() {
+            chargeAmountCents = Math.floor(chargeAmountCents / 10);
+            updateAmountDisplay();
+            clearQuickSelection();
+        }
+        
+        function clearAmount() {
+            chargeAmountCents = 0;
+            updateAmountDisplay();
+            clearQuickSelection();
+        }
+        
+        function clearQuickSelection() {
+            document.querySelectorAll('.quick-amount').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+        }
+        
+        function updateAmountDisplay() {
+            const dollars = chargeAmountCents / 100;
+            document.getElementById('charge-amount').value = dollars.toFixed(2);
+        }
+        
+        // Charge
+        async function chargeStudent() {
+            const amount = chargeAmountCents / 100;
+            const errorEl = document.getElementById('charge-error');
+            const successEl = document.getElementById('charge-success');
+            
+            if (amount <= 0) {
+                errorEl.textContent = 'Please enter an amount';
+                errorEl.classList.remove('hidden');
+                successEl.classList.add('hidden');
+                return;
+            }
+            
+            if (amount > currentStudent.balance) {
+                errorEl.textContent = `Insufficient balance. Available: $${currentStudent.balance.toFixed(2)}`;
+                errorEl.classList.remove('hidden');
+                successEl.classList.add('hidden');
+                return;
+            }
+            
+            try {
+                errorEl.classList.add('hidden');
+                
+                const data = await apiCall('/store/charge', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        student_id: currentStudent.student_id,
+                        amount: amount
+                    })
+                });
+                
+                // Add to recent transactions
+                recentTransactions.unshift({
+                    name: currentStudent.student_name,
+                    amount: amount,
+                    time: new Date()
+                });
+                if (recentTransactions.length > 10) recentTransactions.pop();
+                updateTransactionList();
+                
+                // Show success briefly then reset
+                successEl.textContent = `✓ Charged $${amount.toFixed(2)}. New balance: $${parseFloat(data.balance_after).toFixed(2)}`;
+                successEl.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    cancelCharge();
+                }, 2000);
+                
+            } catch (error) {
+                errorEl.textContent = error.message;
+                errorEl.classList.remove('hidden');
+            }
+        }
+        
+        function cancelCharge() {
+            currentStudent = null;
+            chargeAmountCents = 0;
+            
+            document.getElementById('student-id').value = '';
+            document.getElementById('charge-error').classList.add('hidden');
+            document.getElementById('charge-success').classList.add('hidden');
+            
+            document.getElementById('charge-card').classList.add('hidden');
+            document.getElementById('scan-card').classList.remove('hidden');
+        }
+        
+        function updateTransactionList() {
+            const container = document.getElementById('transaction-list');
+            
+            if (recentTransactions.length === 0) {
+                container.innerHTML = '<p style="color: #999; text-align: center;">No transactions yet</p>';
+                return;
+            }
+            
+            container.innerHTML = recentTransactions.map(tx => `
+                <div class="transaction-item">
+                    <div>
+                        <div>${tx.name}</div>
+                        <div class="transaction-time">${tx.time.toLocaleTimeString()}</div>
+                    </div>
+                    <div class="transaction-amount">-$${tx.amount.toFixed(2)}</div>
+                </div>
+            `).join('');
+        }
+        
+        // Allow Enter key to scan
+        document.getElementById('student-id').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                scanStudent();
+            }
+        });
+        
+        // ===== OFFLINE DETECTION =====
+        function updateOnlineStatus() {
+            const banner = document.getElementById('offline-banner');
+            if (navigator.onLine) {
+                banner.classList.remove('visible');
+                document.body.classList.remove('offline');
+            } else {
+                banner.classList.add('visible');
+                document.body.classList.add('offline');
+            }
+        }
+        
+        window.addEventListener('online', updateOnlineStatus);
+        window.addEventListener('offline', updateOnlineStatus);
+        updateOnlineStatus();
+        
+        // ===== SERVICE WORKER REGISTRATION =====
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js')
+                .then((registration) => {
+                    console.log('[PWA] Service Worker registered:', registration.scope);
+                })
+                .catch((error) => {
+                    console.log('[PWA] Service Worker registration failed:', error);
+                });
+        }
+    </script>
+</body>
+</html>
