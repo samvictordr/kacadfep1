@@ -385,6 +385,689 @@
         body.offline {
             padding-top: 36px;
         }
+        
+        /* ===== DESKTOP VIEW STYLES ===== */
+        .view-toggle-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+        
+        body.desktop-mode {
+            background: #f5f5f5;
+        }
+        
+        body.desktop-mode .container {
+            max-width: 100%;
+            padding: 0;
+        }
+        
+        .desktop-layout {
+            display: none;
+            min-height: 100vh;
+        }
+        
+        body.desktop-mode .desktop-layout {
+            display: block;
+        }
+        
+        body.desktop-mode .mobile-layout {
+            display: none;
+        }
+        
+        .desktop-header {
+            background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
+            color: white;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .desktop-header h1 {
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .desktop-header .clerk-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .desktop-header .clerk-info span {
+            opacity: 0.9;
+        }
+        
+        .desktop-main {
+            display: grid;
+            grid-template-columns: 350px 1fr 350px;
+            gap: 20px;
+            padding: 20px;
+            min-height: calc(100vh - 70px);
+        }
+        
+        .desktop-panel {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .panel-header {
+            background: #f9f9f9;
+            padding: 16px 20px;
+            border-bottom: 1px solid #eee;
+            font-weight: 600;
+            font-size: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .panel-header .badge {
+            background: #FF9800;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+        
+        .panel-content {
+            padding: 20px;
+            max-height: calc(100vh - 180px);
+            overflow-y: auto;
+        }
+        
+        /* Left Panel - Scanner */
+        .scanner-panel .panel-content {
+            text-align: center;
+        }
+        
+        .desktop-qr-reader {
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto 16px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #000;
+            min-height: 250px;
+        }
+        
+        /* Center Panel - Transaction */
+        .transaction-panel {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .transaction-panel .panel-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .desktop-student-card {
+            background: linear-gradient(135deg, #fff8e1 0%, #ffe082 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .desktop-student-card.teacher-card {
+            background: linear-gradient(135deg, #e3f2fd 0%, #90caf9 100%);
+        }
+        
+        .desktop-student-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+        
+        .desktop-student-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #333;
+        }
+        
+        .desktop-student-type {
+            background: #FF9800;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .desktop-student-type.teacher {
+            background: #2196F3;
+        }
+        
+        .desktop-student-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .detail-item {
+            background: rgba(255,255,255,0.7);
+            padding: 12px;
+            border-radius: 8px;
+        }
+        
+        .detail-label {
+            font-size: 0.75rem;
+            color: #666;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+        
+        .detail-value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .desktop-balance-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+        }
+        
+        .balance-before, .balance-after {
+            text-align: center;
+        }
+        
+        .balance-before .amount {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #4CAF50;
+        }
+        
+        .balance-after .amount {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2196F3;
+        }
+        
+        .balance-arrow {
+            font-size: 2rem;
+            color: #999;
+        }
+        
+        .charge-label {
+            text-align: center;
+            padding: 8px 16px;
+            background: #ffebee;
+            border-radius: 8px;
+        }
+        
+        .charge-label .amount {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #f44336;
+        }
+        
+        /* Charge Section */
+        .desktop-charge-section {
+            background: #f9f9f9;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .desktop-amount-display {
+            font-size: 3rem;
+            font-weight: 700;
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            border: 2px solid #e0e0e0;
+        }
+        
+        .desktop-quick-amounts {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        
+        .desktop-quick-amounts button {
+            padding: 16px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .desktop-quick-amounts button:hover {
+            border-color: #FF9800;
+            background: #fff8e1;
+        }
+        
+        .desktop-quick-amounts button.selected {
+            border-color: #FF9800;
+            background: #FF9800;
+            color: white;
+        }
+        
+        .desktop-keypad {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        
+        .desktop-keypad button {
+            padding: 20px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            transition: background 0.2s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .desktop-keypad button:hover {
+            background: #f5f5f5;
+        }
+        
+        .desktop-keypad button:active {
+            background: #FF9800;
+            color: white;
+        }
+        
+        .desktop-keypad .key-clear {
+            background: #ffebee;
+            color: #f44336;
+        }
+        
+        .desktop-keypad .key-backspace {
+            background: #e3f2fd;
+            color: #1976D2;
+        }
+        
+        /* Action Buttons */
+        .desktop-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        
+        .desktop-actions button {
+            padding: 16px 24px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+        
+        .desktop-actions button:active {
+            transform: scale(0.98);
+        }
+        
+        .btn-confirm {
+            background: linear-gradient(135deg, #4CAF50 0%, #388E3C 100%);
+            color: white;
+        }
+        
+        .btn-void {
+            background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+            color: white;
+        }
+        
+        .btn-cancel-desktop {
+            background: #e0e0e0;
+            color: #333;
+        }
+        
+        /* Warnings */
+        .warning-banner {
+            background: #fff3e0;
+            border: 2px solid #FF9800;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .warning-banner.error {
+            background: #ffebee;
+            border-color: #f44336;
+            color: #c62828;
+        }
+        
+        .warning-banner.duplicate {
+            background: #fff8e1;
+            border-color: #ffc107;
+            color: #f57f17;
+        }
+        
+        /* Right Panel - Summary */
+        .summary-panel .panel-content {
+            padding: 0;
+        }
+        
+        .summary-section {
+            padding: 16px 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .summary-section:last-child {
+            border-bottom: none;
+        }
+        
+        .summary-section h3 {
+            font-size: 0.85rem;
+            color: #666;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+        
+        .summary-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        
+        .stat-box {
+            background: #f9f9f9;
+            padding: 16px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-box .value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #333;
+        }
+        
+        .stat-box .label {
+            font-size: 0.75rem;
+            color: #888;
+            margin-top: 4px;
+        }
+        
+        .stat-box.highlight {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+        }
+        
+        .stat-box.highlight .value {
+            color: #2e7d32;
+        }
+        
+        /* Transaction History Table */
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+        
+        .history-table th {
+            text-align: left;
+            padding: 10px 12px;
+            background: #f5f5f5;
+            font-weight: 600;
+            color: #666;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .history-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .history-table tr:hover {
+            background: #fafafa;
+        }
+        
+        .history-table .amount {
+            font-weight: 600;
+            color: #f44336;
+        }
+        
+        .history-table .time {
+            color: #888;
+        }
+        
+        /* Cost Center Breakdown */
+        .breakdown-list {
+            list-style: none;
+        }
+        
+        .breakdown-list li {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .breakdown-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .breakdown-list .program-name {
+            font-weight: 500;
+        }
+        
+        .breakdown-list .program-amount {
+            font-weight: 600;
+            color: #4CAF50;
+        }
+        
+        /* Receipt Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+        
+        .modal-overlay.hidden {
+            display: none;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+        
+        .receipt-success {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #4CAF50 0%, #388E3C 100%);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 20px;
+            font-size: 2.5rem;
+            color: white;
+        }
+        
+        .receipt-details {
+            text-align: left;
+            background: #f9f9f9;
+            padding: 16px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .receipt-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px dashed #ddd;
+        }
+        
+        .receipt-row:last-child {
+            border-bottom: none;
+        }
+        
+        .receipt-row.total {
+            font-weight: 700;
+            font-size: 1.1rem;
+            border-top: 2px solid #333;
+            margin-top: 8px;
+            padding-top: 12px;
+        }
+        
+        /* End of Day Summary Modal */
+        .eod-summary {
+            max-width: 600px;
+        }
+        
+        .eod-summary h2 {
+            margin-bottom: 20px;
+        }
+        
+        .eod-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .eod-stat {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 12px;
+        }
+        
+        .eod-stat .value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #FF9800;
+        }
+        
+        .eod-stat .label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .eod-breakdown {
+            text-align: left;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .eod-breakdown table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .eod-breakdown th, .eod-breakdown td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .eod-breakdown th {
+            background: #f5f5f5;
+            font-weight: 600;
+        }
+        
+        /* Export Button */
+        .export-btn {
+            background: #1976D2;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .export-btn:hover {
+            background: #1565C0;
+        }
+        
+        /* No Student State */
+        .no-student-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+        
+        .no-student-state .icon {
+            font-size: 4rem;
+            margin-bottom: 16px;
+        }
+        
+        .no-student-state h3 {
+            color: #666;
+            margin-bottom: 8px;
+        }
+        
+        /* Student Today History */
+        .student-today-section {
+            background: #f0f7ff;
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 16px;
+        }
+        
+        .student-today-section h4 {
+            font-size: 0.9rem;
+            color: #1976D2;
+            margin-bottom: 12px;
+        }
+        
+        .student-transactions-list {
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        
+        .student-tx-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #e3f2fd;
+            font-size: 0.85rem;
+        }
+        
+        .student-tx-item:last-child {
+            border-bottom: none;
+        }
     </style>
 </head>
 <body>
@@ -422,6 +1105,10 @@
     <!-- Main Screen - Scan -->
     <div id="main-screen" class="screen">
         <button class="logout-btn" onclick="logout()">Logout</button>
+        <button class="view-toggle-btn" onclick="toggleDesktopView()">🖥️ Desktop View</button>
+        
+        <!-- Mobile Layout -->
+        <div class="mobile-layout">
         <div class="container">
             <div class="header">
                 <h1>🏪 Store</h1>
@@ -506,6 +1193,288 @@
                 <div id="transaction-list" class="transaction-list">
                     <p style="color: #999; text-align: center;">No transactions yet</p>
                 </div>
+            </div>
+        </div>
+        </div>
+        
+        <!-- Desktop Layout -->
+        <div class="desktop-layout">
+            <div class="desktop-header">
+                <h1>🏪 Academy Store - POS Terminal</h1>
+                <div class="clerk-info">
+                    <span id="desktop-date"></span>
+                    <span>|</span>
+                    <span>Clerk: <strong id="clerk-name">-</strong></span>
+                    <span>|</span>
+                    <span>Terminal: <strong id="terminal-id">POS-001</strong></span>
+                    <button class="logout-btn" onclick="logout()" style="position:static;">Logout</button>
+                    <button class="view-toggle-btn" onclick="toggleDesktopView()" style="position:static;">📱 Mobile View</button>
+                </div>
+            </div>
+            
+            <div class="desktop-main">
+                <!-- Left Panel: Scanner -->
+                <div class="desktop-panel scanner-panel">
+                    <div class="panel-header">
+                        📷 QR Scanner
+                        <span class="badge" id="scanner-status">Ready</span>
+                    </div>
+                    <div class="panel-content">
+                        <div id="desktop-qr-reader" class="desktop-qr-reader"></div>
+                        <p style="color: #666; font-size: 0.85rem; margin-bottom: 16px;">Point camera at QR code</p>
+                        
+                        <div class="form-group">
+                            <input type="text" id="desktop-student-id" placeholder="Or enter ID manually..." style="text-align:center;">
+                        </div>
+                        <button class="btn btn-primary" onclick="desktopScanStudent()">Look Up</button>
+                        
+                        <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee;">
+                            <button class="btn btn-secondary" onclick="showEndOfDaySummary()">📊 End of Day Summary</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Center Panel: Transaction -->
+                <div class="desktop-panel transaction-panel">
+                    <div class="panel-header">
+                        💳 Current Transaction
+                        <span id="scan-timestamp" style="font-size:0.8rem;color:#888;"></span>
+                    </div>
+                    <div class="panel-content">
+                        <!-- No Student State -->
+                        <div id="desktop-no-student" class="no-student-state">
+                            <div class="icon">👤</div>
+                            <h3>No Customer Selected</h3>
+                            <p>Scan a QR code or enter an ID to begin</p>
+                        </div>
+                        
+                        <!-- Student Info (hidden until scan) -->
+                        <div id="desktop-student-info" class="hidden">
+                            <!-- Warnings -->
+                            <div id="desktop-warnings"></div>
+                            
+                            <!-- Student Card -->
+                            <div id="desktop-student-card" class="desktop-student-card">
+                                <div class="desktop-student-header">
+                                    <div class="desktop-student-name" id="desktop-display-name">-</div>
+                                    <span class="desktop-student-type" id="desktop-person-type">Student</span>
+                                </div>
+                                <div class="desktop-student-details">
+                                    <div class="detail-item">
+                                        <div class="detail-label">Program / Event</div>
+                                        <div class="detail-value" id="desktop-display-program">-</div>
+                                    </div>
+                                    <div class="detail-item">
+                                        <div class="detail-label">Cost Center</div>
+                                        <div class="detail-value" id="desktop-cost-center">-</div>
+                                    </div>
+                                    <div class="detail-item">
+                                        <div class="detail-label">Today's Allowance</div>
+                                        <div class="detail-value" id="desktop-allowance-limit">-</div>
+                                    </div>
+                                    <div class="detail-item">
+                                        <div class="detail-label">Spent Today</div>
+                                        <div class="detail-value" id="desktop-spent-today">-</div>
+                                    </div>
+                                </div>
+                                <div class="desktop-balance-row">
+                                    <div class="balance-before">
+                                        <div class="amount" id="desktop-balance-before">0.00 SAR</div>
+                                        <div class="detail-label">Before</div>
+                                    </div>
+                                    <div class="charge-label">
+                                        <div class="detail-label">Charge</div>
+                                        <div class="amount" id="desktop-charge-preview">-0.00 SAR</div>
+                                    </div>
+                                    <div class="balance-arrow">→</div>
+                                    <div class="balance-after">
+                                        <div class="amount" id="desktop-balance-after">0.00 SAR</div>
+                                        <div class="detail-label">After</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Student's Today Transactions -->
+                            <div class="student-today-section">
+                                <h4>📋 Customer's Transactions Today (<span id="desktop-student-tx-count">0</span>)</h4>
+                                <div id="desktop-student-transactions" class="student-transactions-list">
+                                    <p style="color:#999;text-align:center;font-size:0.85rem;">No transactions yet today</p>
+                                </div>
+                                <div style="margin-top:12px;display:flex;justify-content:space-between;align-items:center;">
+                                    <span style="color:#666;font-size:0.85rem;">Total Spent Today:</span>
+                                    <strong id="desktop-student-total-spent" style="color:#f44336;">0.00 SAR</strong>
+                                </div>
+                            </div>
+                            
+                            <!-- Charge Section -->
+                            <div class="desktop-charge-section" style="margin-top:20px;">
+                                <div class="desktop-amount-display" id="desktop-amount-display">0.00 SAR</div>
+                                
+                                <div class="desktop-quick-amounts">
+                                    <button onclick="desktopSetAmount(5)">5 SAR</button>
+                                    <button onclick="desktopSetAmount(10)">10 SAR</button>
+                                    <button onclick="desktopSetAmount(15)">15 SAR</button>
+                                    <button onclick="desktopSetAmount(20)">20 SAR</button>
+                                    <button onclick="desktopSetAmount(25)">25 SAR</button>
+                                    <button onclick="desktopSetAmount(30)">30 SAR</button>
+                                    <button onclick="desktopSetAmount(50)">50 SAR</button>
+                                    <button onclick="desktopSetAmount(100)">100 SAR</button>
+                                </div>
+                                
+                                <div class="desktop-keypad">
+                                    <button onclick="desktopAddDigit('1')">1</button>
+                                    <button onclick="desktopAddDigit('2')">2</button>
+                                    <button onclick="desktopAddDigit('3')">3</button>
+                                    <button class="key-backspace" onclick="desktopBackspace()">←</button>
+                                    <button onclick="desktopAddDigit('4')">4</button>
+                                    <button onclick="desktopAddDigit('5')">5</button>
+                                    <button onclick="desktopAddDigit('6')">6</button>
+                                    <button class="key-clear" onclick="desktopClearAmount()">C</button>
+                                    <button onclick="desktopAddDigit('7')">7</button>
+                                    <button onclick="desktopAddDigit('8')">8</button>
+                                    <button onclick="desktopAddDigit('9')">9</button>
+                                    <button onclick="desktopAddDigit('00')">00</button>
+                                    <button onclick="desktopAddDigit('0')" style="grid-column: span 2;">0</button>
+                                    <button onclick="desktopAddDigit('.')">.</button>
+                                    <button style="visibility:hidden;"></button>
+                                </div>
+                            </div>
+                            
+                            <!-- Action Buttons -->
+                            <div class="desktop-actions">
+                                <button class="btn-confirm" onclick="desktopConfirmCharge()">✓ Confirm Charge</button>
+                                <button class="btn-void" onclick="desktopVoidTransaction()">✕ Void / Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right Panel: Summary -->
+                <div class="desktop-panel summary-panel">
+                    <div class="panel-header">
+                        📊 Daily Summary
+                        <button class="export-btn" onclick="exportToPDF()" style="padding:6px 12px;font-size:0.8rem;">
+                            📄 Export PDF
+                        </button>
+                    </div>
+                    <div class="panel-content">
+                        <div class="summary-section">
+                            <h3>Today's Totals</h3>
+                            <div class="summary-stats">
+                                <div class="stat-box highlight">
+                                    <div class="value" id="daily-total-sales">0.00</div>
+                                    <div class="label">Total Sales (SAR)</div>
+                                </div>
+                                <div class="stat-box">
+                                    <div class="value" id="daily-tx-count">0</div>
+                                    <div class="label">Transactions</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="summary-section">
+                            <h3>By Program / Cost Center</h3>
+                            <ul class="breakdown-list" id="program-breakdown">
+                                <li style="color:#999;text-align:center;">No data yet</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="summary-section">
+                            <h3>Recent Transactions</h3>
+                            <table class="history-table">
+                                <thead>
+                                    <tr>
+                                        <th>Time</th>
+                                        <th>Name</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="desktop-recent-transactions">
+                                    <tr><td colspan="3" style="text-align:center;color:#999;">No transactions</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Receipt Confirmation Modal -->
+    <div id="receipt-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="receipt-success">✓</div>
+            <h2>Transaction Complete!</h2>
+            <div class="receipt-details">
+                <div class="receipt-row">
+                    <span>Customer</span>
+                    <span id="receipt-name">-</span>
+                </div>
+                <div class="receipt-row">
+                    <span>Program</span>
+                    <span id="receipt-program">-</span>
+                </div>
+                <div class="receipt-row">
+                    <span>Time</span>
+                    <span id="receipt-time">-</span>
+                </div>
+                <div class="receipt-row">
+                    <span>Clerk</span>
+                    <span id="receipt-clerk">-</span>
+                </div>
+                <div class="receipt-row total">
+                    <span>Amount Charged</span>
+                    <span id="receipt-amount">-</span>
+                </div>
+                <div class="receipt-row">
+                    <span>New Balance</span>
+                    <span id="receipt-balance">-</span>
+                </div>
+            </div>
+            <button class="btn btn-primary" onclick="closeReceiptModal()">Done</button>
+        </div>
+    </div>
+    
+    <!-- End of Day Summary Modal -->
+    <div id="eod-modal" class="modal-overlay hidden">
+        <div class="modal-content eod-summary">
+            <h2>📊 End of Day Summary</h2>
+            <p id="eod-date" style="color:#666;margin-bottom:20px;"></p>
+            
+            <div class="eod-stats">
+                <div class="eod-stat">
+                    <div class="value" id="eod-total-sales">0.00</div>
+                    <div class="label">Total Sales (SAR)</div>
+                </div>
+                <div class="eod-stat">
+                    <div class="value" id="eod-tx-count">0</div>
+                    <div class="label">Transactions</div>
+                </div>
+                <div class="eod-stat">
+                    <div class="value" id="eod-avg-tx">0.00</div>
+                    <div class="label">Avg Transaction</div>
+                </div>
+            </div>
+            
+            <div class="eod-breakdown">
+                <h3 style="margin-bottom:12px;">Breakdown by Program</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Program</th>
+                            <th>Cost Center</th>
+                            <th>Count</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody id="eod-breakdown-table">
+                    </tbody>
+                </table>
+            </div>
+            
+            <div style="margin-top:20px;display:flex;gap:12px;justify-content:center;">
+                <button class="export-btn" onclick="exportToPDF()">📄 Export to PDF</button>
+                <button class="btn btn-secondary" onclick="closeEodModal()" style="width:auto;padding:12px 24px;">Close</button>
             </div>
         </div>
     </div>
@@ -665,7 +1634,7 @@
                 document.getElementById('display-program').textContent = data.program_name;
                 
                 const balanceEl = document.getElementById('display-balance');
-                balanceEl.textContent = `$${currentStudent.balance.toFixed(2)}`;
+                balanceEl.textContent = formatSAR(currentStudent.balance);
                 balanceEl.classList.toggle('low', currentStudent.balance < 10);
                 
                 document.getElementById('scan-card').classList.add('hidden');
@@ -929,7 +1898,7 @@
                 document.getElementById('display-program').textContent = data.program_name;
                 
                 const balanceEl = document.getElementById('display-balance');
-                balanceEl.textContent = `$${currentStudent.balance.toFixed(2)}`;
+                balanceEl.textContent = formatSAR(currentStudent.balance);
                 balanceEl.classList.toggle('low', currentStudent.balance < 10);
                 
                 document.getElementById('scan-card').classList.add('hidden');
@@ -998,6 +1967,588 @@
         window.addEventListener('offline', updateOnlineStatus);
         updateOnlineStatus();
         
+        // ===== DESKTOP VIEW =====
+        let isDesktopView = localStorage.getItem('desktopView') === 'true';
+        let desktopAmountCents = 0;
+        let desktopCurrentPerson = null;
+        let desktopScanner = null;
+        let desktopScannerActive = false;
+        let lastScannedId = null;
+        let lastScanTime = 0;
+        let dailyStats = {
+            totalSales: 0,
+            transactionCount: 0,
+            byProgram: {}
+        };
+        
+        // Load daily stats from localStorage
+        function loadDailyStats() {
+            const today = new Date().toDateString();
+            const saved = localStorage.getItem('dailyStats');
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                if (parsed.date === today) {
+                    dailyStats = parsed.stats;
+                    recentTransactions = parsed.transactions || [];
+                }
+            }
+            updateDailySummary();
+        }
+        
+        function saveDailyStats() {
+            const today = new Date().toDateString();
+            localStorage.setItem('dailyStats', JSON.stringify({
+                date: today,
+                stats: dailyStats,
+                transactions: recentTransactions
+            }));
+        }
+        
+        function toggleDesktopView() {
+            isDesktopView = !isDesktopView;
+            localStorage.setItem('desktopView', isDesktopView);
+            applyViewMode();
+        }
+        
+        function applyViewMode() {
+            if (isDesktopView) {
+                document.body.classList.add('desktop-mode');
+                document.getElementById('desktop-date').textContent = new Date().toLocaleDateString('en-US', {
+                    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+                });
+                document.getElementById('clerk-name').textContent = userData?.name || 'Store Staff';
+                document.getElementById('terminal-id').textContent = 'POS-' + (userData?.user_id?.substring(0,4) || '001').toUpperCase();
+                
+                // Stop mobile scanner and start desktop scanner
+                stopScanner();
+                startDesktopScanner();
+                loadDailyStats();
+            } else {
+                document.body.classList.remove('desktop-mode');
+                stopDesktopScanner();
+                
+                // Restart mobile scanner if on camera mode
+                if (document.getElementById('btn-camera-mode')?.classList.contains('active')) {
+                    setTimeout(startScanner, 300);
+                }
+            }
+        }
+        
+        // Desktop Scanner
+        async function startDesktopScanner() {
+            if (desktopScannerActive) return;
+            
+            try {
+                desktopScanner = new Html5Qrcode("desktop-qr-reader");
+                
+                await desktopScanner.start(
+                    { facingMode: "environment" },
+                    { fps: 10, qrbox: { width: 200, height: 200 } },
+                    onDesktopScanSuccess,
+                    () => {}
+                );
+                
+                desktopScannerActive = true;
+                document.getElementById('scanner-status').textContent = 'Active';
+                document.getElementById('scanner-status').style.background = '#4CAF50';
+                
+            } catch (err) {
+                console.error('[Desktop Scanner] Error:', err);
+                document.getElementById('desktop-qr-reader').innerHTML = `
+                    <div style="padding:40px;text-align:center;color:#666;">
+                        <p>📷 Camera unavailable</p>
+                        <p style="font-size:0.85rem;">Use manual ID entry below</p>
+                    </div>
+                `;
+                document.getElementById('scanner-status').textContent = 'Manual Only';
+                document.getElementById('scanner-status').style.background = '#FF9800';
+            }
+        }
+        
+        function stopDesktopScanner() {
+            if (desktopScanner && desktopScannerActive) {
+                desktopScanner.stop().then(() => {
+                    desktopScannerActive = false;
+                }).catch(() => {});
+            }
+        }
+        
+        async function onDesktopScanSuccess(decodedText) {
+            // Debounce - prevent duplicate scans within 3 seconds
+            const now = Date.now();
+            if (decodedText === lastScannedId && now - lastScanTime < 3000) {
+                return;
+            }
+            
+            if (navigator.vibrate) navigator.vibrate(200);
+            
+            lastScannedId = decodedText;
+            lastScanTime = now;
+            
+            await processDesktopScan(decodedText);
+        }
+        
+        async function desktopScanStudent() {
+            const studentId = document.getElementById('desktop-student-id').value.trim();
+            if (!studentId) return;
+            
+            await processDesktopScan(studentId);
+            document.getElementById('desktop-student-id').value = '';
+        }
+        
+        // Enter key for desktop manual entry
+        document.getElementById('desktop-student-id')?.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                desktopScanStudent();
+            }
+        });
+        
+        async function processDesktopScan(qrData) {
+            const warningsEl = document.getElementById('desktop-warnings');
+            warningsEl.innerHTML = '';
+            
+            // Parse QR data
+            let personId;
+            try {
+                const parsed = JSON.parse(qrData);
+                personId = parsed.student_id || parsed.id || qrData;
+            } catch {
+                personId = qrData;
+            }
+            
+            // Check for duplicate scan
+            if (desktopCurrentPerson && desktopCurrentPerson.student_id === personId) {
+                warningsEl.innerHTML = `
+                    <div class="warning-banner duplicate">
+                        ⚠️ <strong>Duplicate Scan:</strong> This customer is already loaded
+                    </div>
+                `;
+                return;
+            }
+            
+            try {
+                const data = await apiCall('/store/scan', {
+                    method: 'POST',
+                    body: JSON.stringify({ student_id: personId })
+                });
+                
+                desktopCurrentPerson = data;
+                desktopCurrentPerson.balance = parseFloat(data.balance);
+                desktopCurrentPerson.scanTime = new Date();
+                
+                // Update UI
+                document.getElementById('desktop-no-student').classList.add('hidden');
+                document.getElementById('desktop-student-info').classList.remove('hidden');
+                
+                const isTeacher = personId.startsWith('teacher:');
+                document.getElementById('desktop-display-name').textContent = data.student_name;
+                document.getElementById('desktop-display-program').textContent = data.program_name || '-';
+                document.getElementById('desktop-cost-center').textContent = data.cost_center || 'CC-' + (data.program_name?.substring(0,3) || 'GEN').toUpperCase();
+                document.getElementById('desktop-allowance-limit').textContent = formatSAR(data.daily_allowance || desktopCurrentPerson.balance + (data.spent_today || 0));
+                document.getElementById('desktop-spent-today').textContent = formatSAR(data.spent_today || 0);
+                
+                document.getElementById('desktop-person-type').textContent = isTeacher ? 'Teacher' : 'Student';
+                document.getElementById('desktop-person-type').classList.toggle('teacher', isTeacher);
+                document.getElementById('desktop-student-card').classList.toggle('teacher-card', isTeacher);
+                
+                document.getElementById('desktop-balance-before').textContent = formatSAR(desktopCurrentPerson.balance);
+                document.getElementById('scan-timestamp').textContent = 'Scanned: ' + new Date().toLocaleTimeString();
+                
+                // Load student's today transactions (mock for now - would need API)
+                updateStudentTodayTransactions(data.today_transactions || []);
+                
+                // Reset amount
+                desktopAmountCents = 0;
+                updateDesktopAmountDisplay();
+                
+                // Check for low balance warning
+                if (desktopCurrentPerson.balance < 10) {
+                    warningsEl.innerHTML += `
+                        <div class="warning-banner error">
+                            ⚠️ <strong>Low Balance Warning:</strong> Customer has only ${formatSAR(desktopCurrentPerson.balance)} remaining
+                        </div>
+                    `;
+                }
+                
+            } catch (error) {
+                if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+                warningsEl.innerHTML = `
+                    <div class="warning-banner error">
+                        ❌ <strong>Error:</strong> ${error.message}
+                    </div>
+                `;
+            }
+        }
+        
+        function updateStudentTodayTransactions(transactions) {
+            const container = document.getElementById('desktop-student-transactions');
+            const countEl = document.getElementById('desktop-student-tx-count');
+            const totalEl = document.getElementById('desktop-student-total-spent');
+            
+            // Use recent transactions for this student as mock data
+            const studentTx = recentTransactions.filter(tx => 
+                tx.name === desktopCurrentPerson?.student_name
+            );
+            
+            countEl.textContent = studentTx.length;
+            
+            if (studentTx.length === 0) {
+                container.innerHTML = '<p style="color:#999;text-align:center;font-size:0.85rem;">No transactions yet today</p>';
+                totalEl.textContent = '0.00 SAR';
+                return;
+            }
+            
+            const total = studentTx.reduce((sum, tx) => sum + tx.amount, 0);
+            totalEl.textContent = formatSAR(total);
+            
+            container.innerHTML = studentTx.map(tx => `
+                <div class="student-tx-item">
+                    <span>${tx.time.toLocaleTimeString()}</span>
+                    <span style="color:#f44336;font-weight:600;">-${formatSAR(tx.amount)}</span>
+                </div>
+            `).join('');
+        }
+        
+        // Desktop Amount Handling
+        function desktopSetAmount(amount) {
+            desktopAmountCents = amount * 100;
+            updateDesktopAmountDisplay();
+            
+            document.querySelectorAll('.desktop-quick-amounts button').forEach(btn => {
+                btn.classList.remove('selected');
+                if (parseInt(btn.textContent) === amount) {
+                    btn.classList.add('selected');
+                }
+            });
+        }
+        
+        function desktopAddDigit(digit) {
+            if (digit === '.' && String(desktopAmountCents).includes('.')) return;
+            
+            if (digit === '00') {
+                desktopAmountCents = desktopAmountCents * 100;
+            } else if (digit === '.') {
+                // Handle decimal - for now just multiply by 10
+                desktopAmountCents = desktopAmountCents * 10;
+            } else {
+                desktopAmountCents = desktopAmountCents * 10 + parseInt(digit);
+            }
+            
+            if (desktopAmountCents > 9999999) desktopAmountCents = 9999999;
+            updateDesktopAmountDisplay();
+            clearDesktopQuickSelection();
+        }
+        
+        function desktopBackspace() {
+            desktopAmountCents = Math.floor(desktopAmountCents / 10);
+            updateDesktopAmountDisplay();
+            clearDesktopQuickSelection();
+        }
+        
+        function desktopClearAmount() {
+            desktopAmountCents = 0;
+            updateDesktopAmountDisplay();
+            clearDesktopQuickSelection();
+        }
+        
+        function clearDesktopQuickSelection() {
+            document.querySelectorAll('.desktop-quick-amounts button').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+        }
+        
+        function updateDesktopAmountDisplay() {
+            const amount = desktopAmountCents / 100;
+            document.getElementById('desktop-amount-display').textContent = formatSAR(amount);
+            document.getElementById('desktop-charge-preview').textContent = '-' + formatSAR(amount);
+            
+            if (desktopCurrentPerson) {
+                const afterBalance = desktopCurrentPerson.balance - amount;
+                document.getElementById('desktop-balance-after').textContent = formatSAR(Math.max(0, afterBalance));
+                document.getElementById('desktop-balance-after').style.color = afterBalance < 0 ? '#f44336' : '#2196F3';
+            }
+        }
+        
+        // Confirm Charge
+        async function desktopConfirmCharge() {
+            if (!desktopCurrentPerson) return;
+            
+            const amount = desktopAmountCents / 100;
+            const warningsEl = document.getElementById('desktop-warnings');
+            
+            if (amount <= 0) {
+                warningsEl.innerHTML = `
+                    <div class="warning-banner error">
+                        ⚠️ Please enter an amount to charge
+                    </div>
+                `;
+                return;
+            }
+            
+            if (amount > desktopCurrentPerson.balance) {
+                warningsEl.innerHTML = `
+                    <div class="warning-banner error">
+                        ❌ <strong>Insufficient Balance:</strong> Customer only has ${formatSAR(desktopCurrentPerson.balance)} available
+                    </div>
+                `;
+                return;
+            }
+            
+            try {
+                const data = await apiCall('/store/charge', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        student_id: desktopCurrentPerson.student_id,
+                        amount: amount
+                    })
+                });
+                
+                // Add to transactions
+                const transaction = {
+                    name: desktopCurrentPerson.student_name,
+                    program: desktopCurrentPerson.program_name || '-',
+                    amount: amount,
+                    time: new Date(),
+                    balanceAfter: parseFloat(data.balance_after),
+                    clerk: userData?.name || 'Store Staff'
+                };
+                
+                recentTransactions.unshift(transaction);
+                if (recentTransactions.length > 50) recentTransactions.pop();
+                
+                // Update daily stats
+                dailyStats.totalSales += amount;
+                dailyStats.transactionCount++;
+                const program = desktopCurrentPerson.program_name || 'General';
+                if (!dailyStats.byProgram[program]) {
+                    dailyStats.byProgram[program] = { count: 0, amount: 0, costCenter: desktopCurrentPerson.cost_center || 'CC-GEN' };
+                }
+                dailyStats.byProgram[program].count++;
+                dailyStats.byProgram[program].amount += amount;
+                
+                saveDailyStats();
+                updateDailySummary();
+                updateTransactionList();
+                updateDesktopRecentTransactions();
+                
+                // Show receipt modal
+                showReceiptModal(transaction, data.balance_after);
+                
+                // Reset state
+                desktopVoidTransaction();
+                
+            } catch (error) {
+                warningsEl.innerHTML = `
+                    <div class="warning-banner error">
+                        ❌ <strong>Error:</strong> ${error.message}
+                    </div>
+                `;
+            }
+        }
+        
+        function desktopVoidTransaction() {
+            desktopCurrentPerson = null;
+            desktopAmountCents = 0;
+            
+            document.getElementById('desktop-no-student').classList.remove('hidden');
+            document.getElementById('desktop-student-info').classList.add('hidden');
+            document.getElementById('desktop-warnings').innerHTML = '';
+            document.getElementById('scan-timestamp').textContent = '';
+            
+            updateDesktopAmountDisplay();
+        }
+        
+        // Update Daily Summary
+        function updateDailySummary() {
+            document.getElementById('daily-total-sales').textContent = dailyStats.totalSales.toFixed(2);
+            document.getElementById('daily-tx-count').textContent = dailyStats.transactionCount;
+            
+            // Update program breakdown
+            const breakdownEl = document.getElementById('program-breakdown');
+            const programs = Object.entries(dailyStats.byProgram);
+            
+            if (programs.length === 0) {
+                breakdownEl.innerHTML = '<li style="color:#999;text-align:center;">No data yet</li>';
+            } else {
+                breakdownEl.innerHTML = programs.map(([name, data]) => `
+                    <li>
+                        <span class="program-name">${name}</span>
+                        <span class="program-amount">${formatSAR(data.amount)} (${data.count})</span>
+                    </li>
+                `).join('');
+            }
+        }
+        
+        function updateDesktopRecentTransactions() {
+            const tbody = document.getElementById('desktop-recent-transactions');
+            
+            if (recentTransactions.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#999;">No transactions</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = recentTransactions.slice(0, 10).map(tx => `
+                <tr>
+                    <td class="time">${tx.time.toLocaleTimeString()}</td>
+                    <td>${tx.name}</td>
+                    <td class="amount">-${formatSAR(tx.amount)}</td>
+                </tr>
+            `).join('');
+        }
+        
+        // Receipt Modal
+        function showReceiptModal(transaction, balanceAfter) {
+            document.getElementById('receipt-name').textContent = transaction.name;
+            document.getElementById('receipt-program').textContent = transaction.program;
+            document.getElementById('receipt-time').textContent = transaction.time.toLocaleString();
+            document.getElementById('receipt-clerk').textContent = transaction.clerk;
+            document.getElementById('receipt-amount').textContent = formatSAR(transaction.amount);
+            document.getElementById('receipt-balance').textContent = formatSAR(parseFloat(balanceAfter));
+            
+            document.getElementById('receipt-modal').classList.remove('hidden');
+        }
+        
+        function closeReceiptModal() {
+            document.getElementById('receipt-modal').classList.add('hidden');
+        }
+        
+        // End of Day Summary
+        function showEndOfDaySummary() {
+            const today = new Date();
+            document.getElementById('eod-date').textContent = today.toLocaleDateString('en-US', {
+                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+            });
+            
+            document.getElementById('eod-total-sales').textContent = dailyStats.totalSales.toFixed(2);
+            document.getElementById('eod-tx-count').textContent = dailyStats.transactionCount;
+            document.getElementById('eod-avg-tx').textContent = dailyStats.transactionCount > 0 
+                ? (dailyStats.totalSales / dailyStats.transactionCount).toFixed(2)
+                : '0.00';
+            
+            // Breakdown table
+            const tbody = document.getElementById('eod-breakdown-table');
+            const programs = Object.entries(dailyStats.byProgram);
+            
+            if (programs.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:#999;">No transactions today</td></tr>';
+            } else {
+                tbody.innerHTML = programs.map(([name, data]) => `
+                    <tr>
+                        <td>${name}</td>
+                        <td>${data.costCenter}</td>
+                        <td>${data.count}</td>
+                        <td><strong>${formatSAR(data.amount)}</strong></td>
+                    </tr>
+                `).join('');
+            }
+            
+            document.getElementById('eod-modal').classList.remove('hidden');
+        }
+        
+        function closeEodModal() {
+            document.getElementById('eod-modal').classList.add('hidden');
+        }
+        
+        // Export to PDF
+        function exportToPDF() {
+            const today = new Date();
+            const dateStr = today.toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, '-');
+            
+            // Create printable content
+            const content = `
+                <html>
+                <head>
+                    <title>Store Report - ${dateStr}</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; padding: 40px; }
+                        h1 { color: #FF9800; }
+                        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+                        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+                        th { background: #f5f5f5; }
+                        .total { font-size: 1.5rem; font-weight: bold; }
+                        .summary-box { display: inline-block; padding: 20px; background: #f9f9f9; margin: 10px; border-radius: 8px; }
+                    </style>
+                </head>
+                <body>
+                    <h1>🏪 Academy Store - Daily Report</h1>
+                    <p><strong>Date:</strong> ${today.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                    <p><strong>Clerk:</strong> ${userData?.name || 'Store Staff'}</p>
+                    <p><strong>Terminal:</strong> POS-${(userData?.user_id?.substring(0,4) || '001').toUpperCase()}</p>
+                    
+                    <h2>Summary</h2>
+                    <div class="summary-box">
+                        <div class="total">${formatSAR(dailyStats.totalSales)}</div>
+                        <div>Total Sales</div>
+                    </div>
+                    <div class="summary-box">
+                        <div class="total">${dailyStats.transactionCount}</div>
+                        <div>Transactions</div>
+                    </div>
+                    <div class="summary-box">
+                        <div class="total">${dailyStats.transactionCount > 0 ? formatSAR(dailyStats.totalSales / dailyStats.transactionCount) : '0.00 SAR'}</div>
+                        <div>Average Transaction</div>
+                    </div>
+                    
+                    <h2>Breakdown by Program</h2>
+                    <table>
+                        <tr><th>Program</th><th>Cost Center</th><th>Transactions</th><th>Amount</th></tr>
+                        ${Object.entries(dailyStats.byProgram).map(([name, data]) => `
+                            <tr>
+                                <td>${name}</td>
+                                <td>${data.costCenter}</td>
+                                <td>${data.count}</td>
+                                <td>${formatSAR(data.amount)}</td>
+                            </tr>
+                        `).join('')}
+                    </table>
+                    
+                    <h2>Transaction History</h2>
+                    <table>
+                        <tr><th>Time</th><th>Customer</th><th>Program</th><th>Amount</th></tr>
+                        ${recentTransactions.map(tx => `
+                            <tr>
+                                <td>${tx.time.toLocaleTimeString()}</td>
+                                <td>${tx.name}</td>
+                                <td>${tx.program || '-'}</td>
+                                <td>-${formatSAR(tx.amount)}</td>
+                            </tr>
+                        `).join('')}
+                    </table>
+                    
+                    <p style="margin-top: 40px; color: #888; font-size: 0.9rem;">
+                        Generated: ${new Date().toLocaleString()}
+                    </p>
+                </body>
+                </html>
+            `;
+            
+            // Open in new window for printing
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(content);
+            printWindow.document.close();
+            printWindow.print();
+        }
+        
+        // Apply view mode on main screen show
+        const originalShowMainScreen2 = showMainScreen;
+        showMainScreen = function() {
+            originalShowMainScreen2.apply(this, arguments);
+            applyViewMode();
+        };
+        
+        // Stop desktop scanner on logout
+        const originalLogout2 = logout;
+        logout = function() {
+            stopDesktopScanner();
+            originalLogout2.apply(this, arguments);
+        };
+        
+        // Initialize desktop view if saved
+        if (isDesktopView && authToken && userData) {
+            setTimeout(applyViewMode, 100);
+        }
+
         // ===== SERVICE WORKER REGISTRATION =====
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('./sw.js')
