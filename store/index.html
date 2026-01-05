@@ -462,7 +462,7 @@
                 <div id="student-info" class="student-info">
                     <div class="student-name" id="display-name">-</div>
                     <div class="student-program" id="display-program">-</div>
-                    <div class="student-balance" id="display-balance">$0.00</div>
+                    <div class="student-balance" id="display-balance">0.00 SAR</div>
                     <div class="balance-label">Available Balance</div>
                 </div>
                 
@@ -475,10 +475,10 @@
                 </div>
                 
                 <div class="quick-amounts">
-                    <button class="quick-amount" onclick="setAmount(5)">$5</button>
-                    <button class="quick-amount" onclick="setAmount(10)">$10</button>
-                    <button class="quick-amount" onclick="setAmount(15)">$15</button>
-                    <button class="quick-amount" onclick="setAmount(20)">$20</button>
+                    <button class="quick-amount" onclick="setAmount(5)">5 SAR</button>
+                    <button class="quick-amount" onclick="setAmount(10)">10 SAR</button>
+                    <button class="quick-amount" onclick="setAmount(15)">15 SAR</button>
+                    <button class="quick-amount" onclick="setAmount(20)">20 SAR</button>
                 </div>
                 
                 <div class="keypad">
@@ -540,6 +540,11 @@
                 month: 'long',
                 day: 'numeric'
             });
+        }
+        
+        // Format SAR currency
+        function formatSAR(amount) {
+            return amount.toFixed(2) + ' SAR';
         }
         
         // API Helper
@@ -682,7 +687,7 @@
             
             document.querySelectorAll('.quick-amount').forEach(btn => {
                 btn.classList.remove('selected');
-                if (parseInt(btn.textContent.replace('$', '')) === amount) {
+                if (parseInt(btn.textContent.replace(' SAR', '')) === amount) {
                     btn.classList.add('selected');
                 }
             });
@@ -732,7 +737,7 @@
             }
             
             if (amount > currentStudent.balance) {
-                errorEl.textContent = `Insufficient balance. Available: $${currentStudent.balance.toFixed(2)}`;
+                errorEl.textContent = `Insufficient balance. Available: ${formatSAR(currentStudent.balance)}`;
                 errorEl.classList.remove('hidden');
                 successEl.classList.add('hidden');
                 return;
@@ -759,7 +764,7 @@
                 updateTransactionList();
                 
                 // Show success briefly then reset
-                successEl.textContent = `✓ Charged $${amount.toFixed(2)}. New balance: $${parseFloat(data.balance_after).toFixed(2)}`;
+                successEl.textContent = `✓ Charged ${formatSAR(amount)}. New balance: ${formatSAR(parseFloat(data.balance_after))}`;
                 successEl.classList.remove('hidden');
                 
                 setTimeout(() => {
@@ -798,7 +803,7 @@
                         <div>${tx.name}</div>
                         <div class="transaction-time">${tx.time.toLocaleTimeString()}</div>
                     </div>
-                    <div class="transaction-amount">-$${tx.amount.toFixed(2)}</div>
+                    <div class="transaction-amount">-${formatSAR(tx.amount)}</div>
                 </div>
             `).join('');
         }

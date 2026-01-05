@@ -300,7 +300,7 @@
             
             <div class="tab-bar">
                 <div class="tab active" onclick="showTab('attendance')">Attendance</div>
-                <div class="tab" onclick="showTab('store')">Store</div>
+                <div class="tab" onclick="showTab('meal')">Meal</div>
                 <div class="tab" onclick="showTab('balance')">Balance</div>
             </div>
             
@@ -314,11 +314,11 @@
                 <button class="btn btn-secondary" onclick="refreshAttendanceQR()">Refresh QR</button>
             </div>
             
-            <!-- Store Tab -->
-            <div id="store-tab" class="card hidden">
-                <h2>🛒 Store QR</h2>
-                <div id="store-error" class="error-message hidden"></div>
-                <div id="store-qr" class="qr-container">
+            <!-- Meal Tab -->
+            <div id="meal-tab" class="card hidden">
+                <h2>🍽️ Meal QR</h2>
+                <div id="meal-error" class="error-message hidden"></div>
+                <div id="meal-qr" class="qr-container">
                     <p>Loading QR code...</p>
                 </div>
             </div>
@@ -470,11 +470,16 @@
             event.target.classList.add('active');
             document.getElementById(`${tabName}-tab`).classList.remove('hidden');
             
-            if (tabName === 'store') {
-                refreshStoreQR();
+            if (tabName === 'meal') {
+                refreshMealQR();
             } else if (tabName === 'balance') {
                 refreshBalance();
             }
+        }
+        
+        // Format SAR currency
+        function formatSAR(amount) {
+            return amount.toFixed(2) + ' SAR';
         }
         
         // Attendance QR
@@ -514,22 +519,22 @@
             }
         }
         
-        // Store QR
-        async function refreshStoreQR() {
-            const container = document.getElementById('store-qr');
-            const errorEl = document.getElementById('store-error');
+        // Meal QR
+        async function refreshMealQR() {
+            const container = document.getElementById('meal-qr');
+            const errorEl = document.getElementById('meal-error');
             
             try {
                 errorEl.classList.add('hidden');
                 container.innerHTML = '<p>Generating QR code...</p>';
                 
-                const data = await apiCall('/student/store-qr');
+                const data = await apiCall('/student/meal-qr');
                 
                 // Clear and create structure
-                container.innerHTML = '<div class="qr-code" id="store-qr-code"></div>';
+                container.innerHTML = '<div class="qr-code" id="meal-qr-code"></div>';
                 
-                // QR contains student_id for store to scan
-                new QRCode(document.getElementById('store-qr-code'), {
+                // QR contains student_id for meal purchase
+                new QRCode(document.getElementById('meal-qr-code'), {
                     text: data.student_id,
                     width: 200,
                     height: 200,
@@ -542,7 +547,7 @@
                 const balance = parseFloat(data.balance);
                 const balanceP = document.createElement('p');
                 balanceP.style.cssText = 'font-size:1.5rem;font-weight:700;color:#4CAF50;margin-top:10px;';
-                balanceP.textContent = `Balance: $${balance.toFixed(2)}`;
+                balanceP.textContent = 'Balance: ' + formatSAR(balance);
                 container.appendChild(balanceP);
                 
             } catch (error) {
@@ -570,20 +575,20 @@
                 const spentToday = parseFloat(data.spent_today);
                 
                 container.innerHTML = `
-                    <div class="balance-amount">$${remaining.toFixed(2)}</div>
+                    <div class="balance-amount">${formatSAR(remaining)}</div>
                     <div class="balance-label">Available Today</div>
                     <div style="margin-top:20px;">
                         <div class="info-row">
                             <span class="info-label">Base Allowance</span>
-                            <span class="info-value">$${baseAmount.toFixed(2)}</span>
+                            <span class="info-value">${formatSAR(baseAmount)}</span>
                         </div>
                         <div class="info-row">
                             <span class="info-label">Bonus</span>
-                            <span class="info-value">$${bonusAmount.toFixed(2)}</span>
+                            <span class="info-value">${formatSAR(bonusAmount)}</span>
                         </div>
                         <div class="info-row">
                             <span class="info-label">Spent Today</span>
-                            <span class="info-value" style="color:#e53935;">-$${spentToday.toFixed(2)}</span>
+                            <span class="info-value" style="color:#e53935;">-${formatSAR(spentToday)}</span>
                         </div>
                     </div>
                 `;

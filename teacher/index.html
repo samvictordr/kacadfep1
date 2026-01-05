@@ -11,6 +11,8 @@
     <link rel="manifest" href="manifest.json">
     <!-- QR Code Scanner Library -->
     <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    <!-- QR Code Generator Library -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     <style>
         * {
             box-sizing: border-box;
@@ -220,6 +222,82 @@
             cursor: pointer;
         }
         
+        .tab-bar {
+            display: flex;
+            background: white;
+            border-radius: 12px;
+            padding: 4px;
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .tab.active {
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+            color: white;
+        }
+        
+        .qr-container {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .qr-code {
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            display: inline-block;
+            margin-bottom: 16px;
+        }
+        
+        .qr-code img, .qr-code svg, .qr-code canvas {
+            display: block;
+        }
+        
+        .balance-display {
+            text-align: center;
+            padding: 30px 20px;
+        }
+        
+        .balance-amount {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #4CAF50;
+        }
+        
+        .balance-label {
+            font-size: 0.9rem;
+            color: #888;
+            margin-top: 5px;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        
+        .info-label {
+            color: #888;
+        }
+        
+        .info-value {
+            font-weight: 600;
+        }
+        
         .scanner-container {
             background: #000;
             border-radius: 12px;
@@ -398,9 +476,17 @@
         <button class="logout-btn" onclick="logout()">Logout</button>
         <div class="container">
             <div class="header">
-                <h1>Attendance</h1>
+                <h1>Welcome, <span id="user-name">Teacher</span></h1>
                 <p id="current-date"></p>
             </div>
+            
+            <div class="tab-bar">
+                <div class="tab active" onclick="showTab('attendance')">Attendance</div>
+                <div class="tab" onclick="showTab('meal')">Meal</div>
+            </div>
+            
+            <!-- Attendance Tab -->
+            <div id="attendance-tab">
             
             <!-- No Session View -->
             <div id="no-session" class="card">
@@ -467,6 +553,28 @@
                 <h3 style="margin-top: 20px; margin-bottom: 10px;">Attendance List</h3>
                 <div id="attendance-list" class="attendance-list">
                     <p style="color: #999; text-align: center;">No attendance recorded yet</p>
+                </div>
+            </div>
+            </div> <!-- End attendance-tab -->
+            
+            <!-- Meal Tab -->
+            <div id="meal-tab" class="hidden">
+                <div class="card">
+                    <h2>🍽️ Meal QR</h2>
+                    <div id="meal-error" class="error-message hidden"></div>
+                    <div id="meal-qr" class="qr-container">
+                        <p>Loading QR code...</p>
+                    </div>
+                    <button class="btn btn-secondary" onclick="refreshMealQR()">Refresh QR</button>
+                </div>
+                
+                <div class="card">
+                    <h2>💰 Today's Balance</h2>
+                    <div id="balance-error" class="error-message hidden"></div>
+                    <div id="balance-info" class="balance-display">
+                        <p>Loading...</p>
+                    </div>
+                    <button class="btn btn-secondary" onclick="refreshBalance()">Refresh</button>
                 </div>
             </div>
         </div>
@@ -585,6 +693,109 @@
         function showMainScreen() {
             document.getElementById('login-screen').classList.remove('active');
             document.getElementById('main-screen').classList.add('active');
+            document.getElementById('user-name').textContent = userData.name;
+        }
+        
+        // Tab Navigation
+        function showTab(tabName) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            if (tabName === 'attendance') {
+                document.getElementById('attendance-tab').classList.remove('hidden');
+                document.getElementById('meal-tab').classList.add('hidden');
+            } else if (tabName === 'meal') {
+                document.getElementById('attendance-tab').classList.add('hidden');
+                document.getElementById('meal-tab').classList.remove('hidden');
+                refreshMealQR();
+                refreshBalance();
+            }
+        }
+        
+        // Format SAR currency
+        function formatSAR(amount) {
+            return amount.toFixed(2) + ' SAR';
+        }
+        
+        // Meal QR
+        async function refreshMealQR() {
+            const container = document.getElementById('meal-qr');
+            const errorEl = document.getElementById('meal-error');
+            
+            try {
+                errorEl.classList.add('hidden');
+                container.innerHTML = '<p>Generating QR code...</p>';
+                
+                const data = await apiCall('/teacher/meal-qr');
+                
+                // Clear and create structure
+                container.innerHTML = '<div class="qr-code" id="meal-qr-code"></div>';
+                
+                // QR contains teacher_id prefixed for store to scan
+                new QRCode(document.getElementById('meal-qr-code'), {
+                    text: 'teacher:' + data.teacher_id,
+                    width: 200,
+                    height: 200,
+                    colorDark: '#000000',
+                    colorLight: '#ffffff',
+                    correctLevel: QRCode.CorrectLevel.M
+                });
+                
+                // Append balance text
+                const balance = parseFloat(data.balance);
+                const balanceP = document.createElement('p');
+                balanceP.style.cssText = 'font-size:1.5rem;font-weight:700;color:#4CAF50;margin-top:10px;';
+                balanceP.textContent = 'Balance: ' + formatSAR(balance);
+                container.appendChild(balanceP);
+                
+            } catch (error) {
+                errorEl.textContent = error.message;
+                errorEl.classList.remove('hidden');
+                container.innerHTML = '<p style="color:#999;">Could not generate QR code</p>';
+            }
+        }
+        
+        // Balance
+        async function refreshBalance() {
+            const container = document.getElementById('balance-info');
+            const errorEl = document.getElementById('balance-error');
+            
+            try {
+                errorEl.classList.add('hidden');
+                container.innerHTML = '<p>Loading balance...</p>';
+                
+                const data = await apiCall('/teacher/balance');
+                
+                // Parse string values to numbers
+                const remaining = parseFloat(data.remaining);
+                const baseAmount = parseFloat(data.base_amount);
+                const bonusAmount = parseFloat(data.bonus_amount);
+                const spentToday = parseFloat(data.spent_today);
+                
+                container.innerHTML = `
+                    <div class="balance-amount">${formatSAR(remaining)}</div>
+                    <div class="balance-label">Available Today</div>
+                    <div style="margin-top:20px;">
+                        <div class="info-row">
+                            <span class="info-label">Base Allowance</span>
+                            <span class="info-value">${formatSAR(baseAmount)}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Bonus</span>
+                            <span class="info-value">${formatSAR(bonusAmount)}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Spent Today</span>
+                            <span class="info-value" style="color:#e53935;">-${formatSAR(spentToday)}</span>
+                        </div>
+                    </div>
+                `;
+                
+            } catch (error) {
+                errorEl.textContent = error.message;
+                errorEl.classList.remove('hidden');
+                container.innerHTML = '<p style="color:#999;">Could not load balance</p>';
+            }
         }
         
         // Load Teacher's Classes
