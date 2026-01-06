@@ -391,21 +391,27 @@
         .view-toggle-btn {
             position: fixed;
             bottom: 20px;
-            left: 20px;
-            background: rgba(0,0,0,0.7);
+            right: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border: none;
             color: white;
-            padding: 10px 18px;
+            padding: 12px 20px;
             border-radius: 25px;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
+            font-weight: 500;
             cursor: pointer;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-            transition: background 0.2s;
+            z-index: 9999;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
         }
         
         .view-toggle-btn:hover {
-            background: rgba(0,0,0,0.85);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+        
+        .view-toggle-btn:active {
+            transform: translateY(0);
         }
         
         body.desktop-mode {
@@ -1500,17 +1506,28 @@
             ? 'http://localhost:8000'
             : 'https://kacadpocp1.onrender.com';
         
+        // Storage keys (unique per PWA to prevent cross-login)
+        const STORAGE_KEY_TOKEN = 'store_authToken';
+        const STORAGE_KEY_USER = 'store_userData';
+        
         // State
-        let authToken = localStorage.getItem('authToken');
-        let userData = JSON.parse(localStorage.getItem('userData') || 'null');
+        let authToken = localStorage.getItem(STORAGE_KEY_TOKEN);
+        let userData = JSON.parse(localStorage.getItem(STORAGE_KEY_USER) || 'null');
         let currentStudent = null;
         let chargeAmountCents = 0;
         let recentTransactions = [];
         
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
-            if (authToken && userData) {
+            // Verify role is correct for this PWA
+            if (authToken && userData && userData.role === 'store') {
                 showMainScreen();
+            } else {
+                // Clear any invalid session
+                authToken = null;
+                userData = null;
+                localStorage.removeItem(STORAGE_KEY_TOKEN);
+                localStorage.removeItem(STORAGE_KEY_USER);
             }
             updateDate();
         });
@@ -1608,8 +1625,8 @@
                 authToken = data.access_token;
                 userData = data;
                 
-                localStorage.setItem('authToken', authToken);
-                localStorage.setItem('userData', JSON.stringify(userData));
+                localStorage.setItem(STORAGE_KEY_TOKEN, authToken);
+                localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(userData));
                 
                 showMainScreen();
             } catch (error) {
@@ -1621,14 +1638,18 @@
         function showMainScreen() {
             document.getElementById('login-screen').classList.remove('active');
             document.getElementById('main-screen').classList.add('active');
+            // Update clerk name display
+            if (userData && userData.name) {
+                document.getElementById('clerk-name').textContent = userData.name;
+            }
         }
         
         function logout() {
             authToken = null;
             userData = null;
             currentStudent = null;
-            localStorage.removeItem('authToken');
-            localStorage.removeItem('userData');
+            localStorage.removeItem(STORAGE_KEY_TOKEN);
+            localStorage.removeItem(STORAGE_KEY_USER);
             
             document.getElementById('main-screen').classList.remove('active');
             document.getElementById('login-screen').classList.add('active');

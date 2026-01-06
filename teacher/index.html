@@ -591,18 +591,29 @@
             ? 'http://localhost:8000'
             : 'https://kacadpocp1.onrender.com';
         
+        // Storage keys (unique per PWA to prevent cross-login)
+        const STORAGE_KEY_TOKEN = 'teacher_authToken';
+        const STORAGE_KEY_USER = 'teacher_userData';
+        
         // State
-        let authToken = localStorage.getItem('authToken');
-        let userData = JSON.parse(localStorage.getItem('userData') || 'null');
+        let authToken = localStorage.getItem(STORAGE_KEY_TOKEN);
+        let userData = JSON.parse(localStorage.getItem(STORAGE_KEY_USER) || 'null');
         let currentSession = null;
         let attendanceRecords = [];
         let teacherClasses = [];
         
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
-            if (authToken && userData) {
+            // Verify role is correct for this PWA
+            if (authToken && userData && userData.role === 'teacher') {
                 showMainScreen();
                 loadTeacherClasses();
+            } else {
+                // Clear any invalid session
+                authToken = null;
+                userData = null;
+                localStorage.removeItem(STORAGE_KEY_TOKEN);
+                localStorage.removeItem(STORAGE_KEY_USER);
             }
             updateDate();
         });
@@ -683,8 +694,8 @@
                 authToken = data.access_token;
                 userData = data;
                 
-                localStorage.setItem('authToken', authToken);
-                localStorage.setItem('userData', JSON.stringify(userData));
+                localStorage.setItem(STORAGE_KEY_TOKEN, authToken);
+                localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(userData));
                 
                 showMainScreen();
                 loadTeacherClasses();
@@ -838,8 +849,8 @@
             userData = null;
             currentSession = null;
             attendanceRecords = [];
-            localStorage.removeItem('authToken');
-            localStorage.removeItem('userData');
+            localStorage.removeItem(STORAGE_KEY_TOKEN);
+            localStorage.removeItem(STORAGE_KEY_USER);
             
             document.getElementById('main-screen').classList.remove('active');
             document.getElementById('login-screen').classList.add('active');
