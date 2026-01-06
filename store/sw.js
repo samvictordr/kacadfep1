@@ -1,5 +1,5 @@
-// Service Worker for Academy Store PWA
-const CACHE_NAME = 'academy-store-v1';
+// Service Worker for Academy Diner PWA
+const CACHE_NAME = 'academy-diner-v1';
 const SHELL_ASSETS = [
     './',
     './index.html',
@@ -30,7 +30,7 @@ self.addEventListener('activate', (event) => {
             .then((cacheNames) => {
                 return Promise.all(
                     cacheNames
-                        .filter((name) => name.startsWith('academy-store-') && name !== CACHE_NAME)
+                        .filter((name) => name.startsWith('academy-diner-') && name !== CACHE_NAME)
                         .map((name) => {
                             console.log('[SW] Deleting old cache:', name);
                             return caches.delete(name);

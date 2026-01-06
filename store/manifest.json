@@ -1,7 +1,7 @@
 {
-    "name": "Academy Store",
-    "short_name": "Store",
-    "description": "Academy Store Portal - Student Purchases",
+    "name": "Academy Diner",
+    "short_name": "Diner",
+    "description": "Academy Diner Portal - Student Purchases",
     "start_url": "./index.html",
     "scope": "./",
     "display": "standalone",

@@ -7,7 +7,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="./icons/icon-192.svg">
-    <title>Academy - Store</title>
+    <title>Academy - Diner</title>
     <link rel="manifest" href="manifest.json">
     <!-- QR Code Scanner Library -->
     <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
@@ -402,6 +402,12 @@
         
         body.desktop-mode {
             background: #f5f5f5;
+        }
+        
+        /* Hide mobile buttons in desktop mode */
+        body.desktop-mode .logout-btn,
+        body.desktop-mode .view-toggle-btn {
+            display: none !important;
         }
         
         body.desktop-mode .container {
@@ -1080,7 +1086,7 @@
     <div id="login-screen" class="screen active">
         <div class="container">
             <div class="header">
-                <h1>🏪 Academy Store</h1>
+                <h1>�️ Academy Diner</h1>
                 <p>Staff Portal</p>
             </div>
             
@@ -1111,7 +1117,7 @@
         <div class="mobile-layout">
         <div class="container">
             <div class="header">
-                <h1>🏪 Store</h1>
+                <h1>�️ Diner</h1>
                 <p id="current-date"></p>
             </div>
             
@@ -1200,7 +1206,7 @@
         <!-- Desktop Layout -->
         <div class="desktop-layout">
             <div class="desktop-header">
-                <h1>🏪 Academy Store - POS Terminal</h1>
+                <h1>�️ Academy Diner - POS Terminal</h1>
                 <div class="clerk-info">
                     <span id="desktop-date"></span>
                     <span>|</span>
@@ -1516,6 +1522,18 @@
             return amount.toFixed(2) + ' SAR';
         }
         
+        // Safely format time from Date object or string
+        function formatTime(timeValue) {
+            if (!timeValue) return '--:--:--';
+            if (typeof timeValue === 'string') {
+                return new Date(timeValue).toLocaleTimeString();
+            }
+            if (timeValue instanceof Date) {
+                return timeValue.toLocaleTimeString();
+            }
+            return '--:--:--';
+        }
+        
         // API Helper
         async function apiCall(endpoint, options = {}) {
             const headers = {
@@ -1576,7 +1594,7 @@
                 });
                 
                 if (data.role !== 'store') {
-                    throw new Error('This app is for store staff only');
+                    throw new Error('This app is for diner staff only');
                 }
                 
                 authToken = data.access_token;
@@ -1770,7 +1788,7 @@
                 <div class="transaction-item">
                     <div>
                         <div>${tx.name}</div>
-                        <div class="transaction-time">${tx.time.toLocaleTimeString()}</div>
+                        <div class="transaction-time">${formatTime(tx.time)}</div>
                     </div>
                     <div class="transaction-amount">-${formatSAR(tx.amount)}</div>
                 </div>
@@ -2016,7 +2034,7 @@
                 document.getElementById('desktop-date').textContent = new Date().toLocaleDateString('en-US', {
                     weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
                 });
-                document.getElementById('clerk-name').textContent = userData?.name || 'Store Staff';
+                document.getElementById('clerk-name').textContent = userData?.name || 'Diner Staff';
                 document.getElementById('terminal-id').textContent = 'POS-' + (userData?.user_id?.substring(0,4) || '001').toUpperCase();
                 
                 // Stop mobile scanner and start desktop scanner
@@ -2204,7 +2222,7 @@
             
             container.innerHTML = studentTx.map(tx => `
                 <div class="student-tx-item">
-                    <span>${tx.time.toLocaleTimeString()}</span>
+                    <span>${formatTime(tx.time)}</span>
                     <span style="color:#f44336;font-weight:600;">-${formatSAR(tx.amount)}</span>
                 </div>
             `).join('');
@@ -2311,7 +2329,7 @@
                     amount: amount,
                     time: new Date(),
                     balanceAfter: parseFloat(data.balance_after),
-                    clerk: userData?.name || 'Store Staff'
+                    clerk: userData?.name || 'Diner Staff'
                 };
                 
                 recentTransactions.unshift(transaction);
@@ -2390,7 +2408,7 @@
             
             tbody.innerHTML = recentTransactions.slice(0, 10).map(tx => `
                 <tr>
-                    <td class="time">${tx.time.toLocaleTimeString()}</td>
+                    <td class="time">${formatTime(tx.time)}</td>
                     <td>${tx.name}</td>
                     <td class="amount">-${formatSAR(tx.amount)}</td>
                 </tr>
@@ -2459,7 +2477,7 @@
             const content = `
                 <html>
                 <head>
-                    <title>Store Report - ${dateStr}</title>
+                    <title>Diner Report - ${dateStr}</title>
                     <style>
                         body { font-family: Arial, sans-serif; padding: 40px; }
                         h1 { color: #FF9800; }
@@ -2471,9 +2489,9 @@
                     </style>
                 </head>
                 <body>
-                    <h1>🏪 Academy Store - Daily Report</h1>
+                    <h1>�️ Academy Diner - Daily Report</h1>
                     <p><strong>Date:</strong> ${today.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
-                    <p><strong>Clerk:</strong> ${userData?.name || 'Store Staff'}</p>
+                    <p><strong>Clerk:</strong> ${userData?.name || 'Diner Staff'}</p>
                     <p><strong>Terminal:</strong> POS-${(userData?.user_id?.substring(0,4) || '001').toUpperCase()}</p>
                     
                     <h2>Summary</h2>
@@ -2508,7 +2526,7 @@
                         <tr><th>Time</th><th>Customer</th><th>Program</th><th>Amount</th></tr>
                         ${recentTransactions.map(tx => `
                             <tr>
-                                <td>${tx.time.toLocaleTimeString()}</td>
+                                <td>${formatTime(tx.time)}</td>
                                 <td>${tx.name}</td>
                                 <td>${tx.program || '-'}</td>
                                 <td>-${formatSAR(tx.amount)}</td>
@@ -2525,9 +2543,21 @@
             
             // Open in new window for printing
             const printWindow = window.open('', '_blank');
+            if (!printWindow) {
+                alert('Please allow popups to export the PDF report');
+                return;
+            }
             printWindow.document.write(content);
             printWindow.document.close();
-            printWindow.print();
+            
+            // Wait for content to load before printing
+            printWindow.onload = function() {
+                printWindow.print();
+            };
+            // Fallback for browsers that don't fire onload
+            setTimeout(() => {
+                printWindow.print();
+            }, 500);
         }
         
         // Apply view mode on main screen show

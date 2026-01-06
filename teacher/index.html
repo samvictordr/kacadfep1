@@ -499,6 +499,7 @@
                         <option value="">-- Select a class --</option>
                     </select>
                 </div>
+                <!-- QR Mode selector commented out - defaulting to static until dynamic is implemented
                 <div class="form-group">
                     <label for="session-mode">Mode</label>
                     <select id="session-mode">
@@ -506,6 +507,7 @@
                         <option value="dynamic">Dynamic</option>
                     </select>
                 </div>
+                -->
                 <button class="btn btn-primary" onclick="startSession()">Start Session</button>
             </div>
             
@@ -844,7 +846,9 @@
         // Start Session
         async function startSession() {
             const classId = document.getElementById('class-id').value;
-            const mode = document.getElementById('session-mode').value;
+            // Defaulting to static mode - dynamic mode selector is commented out
+            const modeElement = document.getElementById('session-mode');
+            const mode = modeElement ? modeElement.value : 'static';
             const errorEl = document.getElementById('start-error');
             
             if (!classId) {
