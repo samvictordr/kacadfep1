@@ -212,6 +212,7 @@
             gap: 10px;
             margin-bottom: 16px;
             flex-wrap: wrap;
+            touch-action: manipulation;
         }
         
         .quick-amount {
@@ -225,6 +226,10 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            -webkit-user-select: none;
         }
         
         .quick-amount:hover {
@@ -269,6 +274,7 @@
             grid-template-columns: repeat(3, 1fr);
             gap: 10px;
             margin-bottom: 16px;
+            touch-action: manipulation;
         }
         
         .keypad button {
@@ -282,6 +288,8 @@
             transition: background 0.2s;
             touch-action: manipulation;
             -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            -webkit-user-select: none;
         }
         
         .keypad button:hover {
@@ -708,8 +716,6 @@
             cursor: pointer;
             transition: background 0.2s;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            touch-action: manipulation;
-            -webkit-tap-highlight-color: transparent;
         }
         
         .desktop-keypad button:hover {
@@ -1186,29 +1192,29 @@
                 </div>
                 
                 <div class="quick-amounts">
-                    <button class="quick-amount" onclick="setAmount(5)">5 SAR</button>
-                    <button class="quick-amount" onclick="setAmount(10)">10 SAR</button>
-                    <button class="quick-amount" onclick="setAmount(15)">15 SAR</button>
-                    <button class="quick-amount" onclick="setAmount(20)">20 SAR</button>
+                    <button type="button" class="quick-amount" onclick="setAmount(5)">5 SAR</button>
+                    <button type="button" class="quick-amount" onclick="setAmount(10)">10 SAR</button>
+                    <button type="button" class="quick-amount" onclick="setAmount(15)">15 SAR</button>
+                    <button type="button" class="quick-amount" onclick="setAmount(20)">20 SAR</button>
                 </div>
                 
                 <div class="keypad">
-                    <button onclick="addDigit('1')">1</button>
-                    <button onclick="addDigit('2')">2</button>
-                    <button onclick="addDigit('3')">3</button>
-                    <button onclick="addDigit('4')">4</button>
-                    <button onclick="addDigit('5')">5</button>
-                    <button onclick="addDigit('6')">6</button>
-                    <button onclick="addDigit('7')">7</button>
-                    <button onclick="addDigit('8')">8</button>
-                    <button onclick="addDigit('9')">9</button>
-                    <button class="key-clear" onclick="clearAmount()">C</button>
-                    <button onclick="addDigit('0')">0</button>
-                    <button class="key-backspace" onclick="backspace()">←</button>
+                    <button type="button" onclick="addDigit('1')">1</button>
+                    <button type="button" onclick="addDigit('2')">2</button>
+                    <button type="button" onclick="addDigit('3')">3</button>
+                    <button type="button" onclick="addDigit('4')">4</button>
+                    <button type="button" onclick="addDigit('5')">5</button>
+                    <button type="button" onclick="addDigit('6')">6</button>
+                    <button type="button" onclick="addDigit('7')">7</button>
+                    <button type="button" onclick="addDigit('8')">8</button>
+                    <button type="button" onclick="addDigit('9')">9</button>
+                    <button type="button" class="key-clear" onclick="clearAmount()">C</button>
+                    <button type="button" onclick="addDigit('0')">0</button>
+                    <button type="button" class="key-backspace" onclick="backspace()">←</button>
                 </div>
                 
-                <button class="btn btn-success" onclick="chargeStudent()">✓ Charge Purchase</button>
-                <button class="btn btn-secondary" onclick="cancelCharge()">Cancel</button>
+                <button type="button" class="btn btn-success" onclick="chargeStudent()">✓ Charge Purchase</button>
+                <button type="button" class="btn btn-secondary" onclick="cancelCharge()">Cancel</button>
             </div>
             
             <!-- Recent Transactions -->
@@ -1844,6 +1850,7 @@
         // ===== QR CAMERA SCANNER =====
         let html5QrcodeScanner = null;
         let scannerActive = false;
+        let scannerInitializing = false;
         
         function switchToCamera() {
             document.getElementById('btn-camera-mode').classList.add('active');
@@ -1862,13 +1869,36 @@
         }
         
         async function startScanner() {
-            if (scannerActive) return;
+            // Prevent multiple simultaneous initializations
+            if (scannerActive || scannerInitializing) {
+                console.log('[Scanner] Already active or initializing, skipping');
+                return;
+            }
+            
+            scannerInitializing = true;
+            
+            // Clean up any existing scanner instance first
+            if (html5QrcodeScanner) {
+                try {
+                    await html5QrcodeScanner.stop();
+                } catch (e) {
+                    // Ignore stop errors for non-running scanner
+                }
+                html5QrcodeScanner = null;
+            }
+            
+            // Ensure the qr-reader element exists and is clean
+            const container = document.getElementById('camera-scanner');
+            const existingReader = document.getElementById('qr-reader');
+            if (!existingReader) {
+                container.innerHTML = `
+                    <div id="qr-reader" class="scanner-container"></div>
+                    <p style="text-align: center; color: #666; font-size: 0.85rem;">Point camera at student's QR code</p>
+                `;
+            }
             
             try {
-                // Only create new instance if one doesn't exist
-                if (!html5QrcodeScanner) {
-                    html5QrcodeScanner = new Html5Qrcode("qr-reader");
-                }
+                html5QrcodeScanner = new Html5Qrcode("qr-reader");
                 
                 const config = {
                     fps: 10,
@@ -1884,10 +1914,15 @@
                 );
                 
                 scannerActive = true;
-                console.log('[Scanner] Camera started');
+                scannerInitializing = false;
+                console.log('[Scanner] Camera started successfully');
                 
             } catch (err) {
                 console.error('[Scanner] Error starting camera:', err);
+                scannerInitializing = false;
+                scannerActive = false;
+                html5QrcodeScanner = null;
+                
                 // Show manual entry if camera fails
                 document.getElementById('camera-scanner').innerHTML = `
                     <div class="camera-permission">
@@ -1899,17 +1934,23 @@
             }
         }
         
-        function stopScanner() {
-            if (html5QrcodeScanner && scannerActive) {
-                html5QrcodeScanner.stop().then(() => {
-                    scannerActive = false;
-                    html5QrcodeScanner = null; // Clear the instance
-                    console.log('[Scanner] Camera stopped');
-                }).catch(err => {
+        async function stopScanner() {
+            scannerInitializing = false;
+            
+            if (html5QrcodeScanner) {
+                try {
+                    if (scannerActive) {
+                        await html5QrcodeScanner.stop();
+                        console.log('[Scanner] Camera stopped');
+                    }
+                } catch (err) {
                     console.error('[Scanner] Error stopping camera:', err);
+                } finally {
                     scannerActive = false;
                     html5QrcodeScanner = null;
-                });
+                }
+            } else {
+                scannerActive = false;
             }
         }
         
@@ -1917,7 +1958,7 @@
             console.log('[Scanner] QR Code detected:', decodedText);
             
             // Stop scanner while processing
-            stopScanner();
+            await stopScanner();
             
             // Vibration feedback
             if (navigator.vibrate) {
@@ -1983,28 +2024,31 @@
         
         // Restart scanner when returning to scan card
         const originalCancelCharge = cancelCharge;
-        cancelCharge = function() {
+        cancelCharge = async function() {
+            // First stop any existing scanner
+            await stopScanner();
+            
             originalCancelCharge.apply(this, arguments);
             
             // Restart scanner if camera mode is active
             if (document.getElementById('btn-camera-mode').classList.contains('active')) {
-                // First stop any existing scanner
-                if (html5QrcodeScanner) {
-                    stopScanner();
-                }
-                // Recreate the scanner container to ensure clean slate
+                // Recreate the scanner container
                 document.getElementById('camera-scanner').innerHTML = `
                     <div id="qr-reader" class="scanner-container"></div>
                     <p style="text-align: center; color: #666; font-size: 0.85rem;">Point camera at student's QR code</p>
                 `;
-                setTimeout(startScanner, 300);
+                setTimeout(startScanner, 500);
             }
         };
         
         // Start scanner when page loads (if logged in)
         const originalShowMainScreen = showMainScreen;
-        showMainScreen = function() {
+        showMainScreen = async function() {
             originalShowMainScreen.apply(this, arguments);
+            
+            // Ensure any previous scanner is stopped first
+            await stopScanner();
+            
             if (document.getElementById('btn-camera-mode').classList.contains('active')) {
                 setTimeout(startScanner, 500);
             }
@@ -2012,12 +2056,8 @@
         
         // Stop scanner on logout
         const originalLogout = logout;
-        logout = function() {
-            stopScanner();
-            originalLogout.apply(this, arguments);
-        };
-        logout = function() {
-            stopScanner();
+        logout = async function() {
+            await stopScanner();
             originalLogout.apply(this, arguments);
         };
         
@@ -2630,6 +2670,20 @@
         if (isDesktopView && authToken && userData) {
             setTimeout(applyViewMode, 100);
         }
+        
+        // ===== MOBILE TOUCH FIX FOR KEYPAD =====
+        // Ensure keypad buttons work properly on mobile devices
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add touch event listeners to keypad and quick amount buttons
+            const keypadButtons = document.querySelectorAll('.keypad button, .quick-amount');
+            keypadButtons.forEach(btn => {
+                // Prevent double-tap zoom on buttons
+                btn.addEventListener('touchend', function(e) {
+                    e.preventDefault();
+                    this.click();
+                }, { passive: false });
+            });
+        });
 
         // ===== SERVICE WORKER REGISTRATION =====
         if ('serviceWorker' in navigator) {
