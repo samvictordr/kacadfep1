@@ -280,6 +280,8 @@
             background: #f5f5f5;
             cursor: pointer;
             transition: background 0.2s;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
         }
         
         .keypad button:hover {
@@ -706,6 +708,8 @@
             cursor: pointer;
             transition: background 0.2s;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
         }
         
         .desktop-keypad button:hover {
@@ -1861,7 +1865,10 @@
             if (scannerActive) return;
             
             try {
-                html5QrcodeScanner = new Html5Qrcode("qr-reader");
+                // Only create new instance if one doesn't exist
+                if (!html5QrcodeScanner) {
+                    html5QrcodeScanner = new Html5Qrcode("qr-reader");
+                }
                 
                 const config = {
                     fps: 10,
@@ -1896,9 +1903,12 @@
             if (html5QrcodeScanner && scannerActive) {
                 html5QrcodeScanner.stop().then(() => {
                     scannerActive = false;
+                    html5QrcodeScanner = null; // Clear the instance
                     console.log('[Scanner] Camera stopped');
                 }).catch(err => {
                     console.error('[Scanner] Error stopping camera:', err);
+                    scannerActive = false;
+                    html5QrcodeScanner = null;
                 });
             }
         }
@@ -1978,7 +1988,11 @@
             
             // Restart scanner if camera mode is active
             if (document.getElementById('btn-camera-mode').classList.contains('active')) {
-                // Recreate the scanner container
+                // First stop any existing scanner
+                if (html5QrcodeScanner) {
+                    stopScanner();
+                }
+                // Recreate the scanner container to ensure clean slate
                 document.getElementById('camera-scanner').innerHTML = `
                     <div id="qr-reader" class="scanner-container"></div>
                     <p style="text-align: center; color: #666; font-size: 0.85rem;">Point camera at student's QR code</p>
@@ -1998,6 +2012,10 @@
         
         // Stop scanner on logout
         const originalLogout = logout;
+        logout = function() {
+            stopScanner();
+            originalLogout.apply(this, arguments);
+        };
         logout = function() {
             stopScanner();
             originalLogout.apply(this, arguments);
