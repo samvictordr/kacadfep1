@@ -484,6 +484,7 @@
             
             <div class="tab-bar">
                 <div class="tab active" onclick="showTab('attendance')">Attendance</div>
+                <div class="tab" onclick="showTab('history')">History</div>
                 <div class="tab" onclick="showTab('meal')">Meal</div>
             </div>
             
@@ -560,6 +561,35 @@
                 </div>
             </div>
             </div> <!-- End attendance-tab -->
+            
+            <!-- History Tab -->
+            <div id="history-tab" class="hidden">
+                <div class="card">
+                    <h2>📊 Attendance History</h2>
+                    <p style="color: #666; font-size: 0.85rem; margin-bottom: 16px;">View past attendance records</p>
+                    
+                    <div class="form-group">
+                        <label for="history-class">Filter by Class</label>
+                        <select id="history-class" onchange="loadAttendanceHistory()">
+                            <option value="">All Classes</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="history-date">Filter by Date</label>
+                        <input type="date" id="history-date" onchange="loadAttendanceHistory()">
+                    </div>
+                    
+                    <button class="btn btn-secondary" onclick="loadAttendanceHistory()" style="margin-bottom: 16px;">🔄 Refresh</button>
+                    
+                    <div id="history-loading" class="hidden" style="text-align: center; color: #666;">Loading...</div>
+                    <div id="history-error" class="error-message hidden"></div>
+                    
+                    <div id="history-list" style="max-height: 400px; overflow-y: auto;">
+                        <p style="color: #999; text-align: center;">Select filters and click Refresh</p>
+                    </div>
+                </div>
+            </div> <!-- End history-tab -->
             
             <!-- Meal Tab -->
             <div id="meal-tab" class="hidden">
@@ -721,14 +751,95 @@
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             event.target.classList.add('active');
             
+            // Hide all tabs
+            document.getElementById('attendance-tab').classList.add('hidden');
+            document.getElementById('history-tab').classList.add('hidden');
+            document.getElementById('meal-tab').classList.add('hidden');
+            
             if (tabName === 'attendance') {
                 document.getElementById('attendance-tab').classList.remove('hidden');
-                document.getElementById('meal-tab').classList.add('hidden');
+            } else if (tabName === 'history') {
+                document.getElementById('history-tab').classList.remove('hidden');
+                populateHistoryClassFilter();
+                loadAttendanceHistory();
             } else if (tabName === 'meal') {
-                document.getElementById('attendance-tab').classList.add('hidden');
                 document.getElementById('meal-tab').classList.remove('hidden');
                 refreshMealQR();
                 refreshBalance();
+            }
+        }
+        
+        // Populate history class filter with teacher's classes
+        function populateHistoryClassFilter() {
+            const select = document.getElementById('history-class');
+            select.innerHTML = '<option value="">All Classes</option>';
+            teacherClasses.forEach(cls => {
+                const option = document.createElement('option');
+                option.value = cls.class_id;
+                option.textContent = cls.name;
+                select.appendChild(option);
+            });
+        }
+        
+        // Load attendance history
+        async function loadAttendanceHistory() {
+            const classId = document.getElementById('history-class').value;
+            const date = document.getElementById('history-date').value;
+            const container = document.getElementById('history-list');
+            const loadingEl = document.getElementById('history-loading');
+            const errorEl = document.getElementById('history-error');
+            
+            try {
+                loadingEl.classList.remove('hidden');
+                errorEl.classList.add('hidden');
+                
+                let url = '/teacher/attendance/history?';
+                if (classId) url += `class_id=${classId}&`;
+                if (date) url += `date=${date}&`;
+                
+                const data = await apiCall(url);
+                loadingEl.classList.add('hidden');
+                
+                if (!data.records || data.records.length === 0) {
+                    container.innerHTML = '<p style="color: #999; text-align: center;">No attendance records found</p>';
+                    return;
+                }
+                
+                // Group by date and class
+                const grouped = {};
+                data.records.forEach(r => {
+                    const key = `${r.attendance_date}_${r.class_id}`;
+                    if (!grouped[key]) {
+                        grouped[key] = {
+                            date: r.attendance_date,
+                            class_name: r.class_name,
+                            records: []
+                        };
+                    }
+                    grouped[key].records.push(r);
+                });
+                
+                container.innerHTML = Object.values(grouped).map(group => `
+                    <div style="margin-bottom: 16px; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
+                        <div style="background: #f5f5f5; padding: 10px 12px; font-weight: 600; border-bottom: 1px solid #e0e0e0;">
+                            📅 ${group.date} - ${group.class_name}
+                            <span style="float: right; color: #4CAF50;">${group.records.length} present</span>
+                        </div>
+                        <div style="padding: 8px;">
+                            ${group.records.map(r => `
+                                <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #f0f0f0;">
+                                    <span style="font-weight: 500;">${r.student_name}</span>
+                                    <span style="color: #888; font-size: 0.85rem;">${new Date(r.scanned_at).toLocaleTimeString()}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `).join('');
+                
+            } catch (error) {
+                loadingEl.classList.add('hidden');
+                errorEl.textContent = error.message;
+                errorEl.classList.remove('hidden');
             }
         }
         

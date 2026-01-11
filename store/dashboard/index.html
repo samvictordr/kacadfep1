@@ -24,11 +24,21 @@
         .header {
             background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
             color: white;
-            padding: 16px 24px;
+            padding: 12px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        
+        .header-logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .header-logo img {
+            height: 40px;
+            width: auto;
         }
         
         .header h1 {
@@ -455,9 +465,21 @@
         .login-screen {
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
+            background: url('../../assets/kaust-bg.jpg') no-repeat center center fixed;
+            background-size: cover;
+            padding: 20px;
+        }
+        
+        .login-logo {
+            margin-bottom: 24px;
+        }
+        
+        .login-logo img {
+            height: 60px;
+            width: auto;
         }
         
         .login-card {
@@ -526,6 +548,9 @@
 <body>
     <!-- Login Screen -->
     <div id="loginScreen" class="login-screen">
+        <div class="login-logo">
+            <img src="../../assets/KAUSTAcademyWhite.png" alt="KAUST Academy">
+        </div>
         <div class="login-card">
             <h2><i class="fa-solid fa-utensils" style="color: #FF9800;"></i> Diner Dashboard</h2>
             <div id="loginError" class="error-message hidden"></div>
@@ -549,7 +574,9 @@
     <!-- Dashboard -->
     <div id="dashboardScreen" class="hidden">
         <header class="header">
-            <h1><i class="fa-solid fa-chart-line"></i> Diner Dashboard</h1>
+            <div class="header-logo">
+                <img src="../../assets/KAUSTAcademyWhite.png" alt="KAUST Academy">
+            </div>
             <div class="header-actions">
                 <span id="staffName" style="opacity: 0.9;"></span>
                 <button class="header-btn" onclick="window.location.href='../'">
