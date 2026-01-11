@@ -473,15 +473,6 @@
             padding: 20px;
         }
         
-        .login-logo {
-            margin-bottom: 24px;
-        }
-        
-        .login-logo img {
-            height: 60px;
-            width: auto;
-        }
-        
         .login-card {
             background: white;
             padding: 40px;
@@ -489,12 +480,6 @@
             box-shadow: 0 8px 32px rgba(0,0,0,0.2);
             width: 100%;
             max-width: 400px;
-        }
-        
-        .login-card h2 {
-            text-align: center;
-            margin-bottom: 24px;
-            color: #333;
         }
         
         .form-group {
@@ -548,11 +533,10 @@
 <body>
     <!-- Login Screen -->
     <div id="loginScreen" class="login-screen">
-        <div class="login-logo">
-            <img src="../../assets/KAUSTAcademyWhite.png" alt="KAUST Academy">
-        </div>
         <div class="login-card">
-            <h2><i class="fa-solid fa-utensils" style="color: #FF9800;"></i> Diner Dashboard</h2>
+            <div style="text-align: center; margin-bottom: 24px;">
+                <img src="../../assets/KAUSTAcademylogo.png" alt="KAUST Academy" style="max-width: 200px; height: auto;">
+            </div>
             <div id="loginError" class="error-message hidden"></div>
             <form id="loginForm">
                 <div class="form-group">
