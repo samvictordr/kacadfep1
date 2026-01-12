@@ -391,12 +391,12 @@
                             <input type="password" id="current-password" required>
                         </div>
                         <div class="form-group">
-                            <label for="new-password">New Password</label>
-                            <input type="password" id="new-password" required minlength="6">
+                            <label for="new-password">New Password (min 8 characters)</label>
+                            <input type="password" id="new-password" required minlength="8">
                         </div>
                         <div class="form-group">
                             <label for="confirm-password">Confirm New Password</label>
-                            <input type="password" id="confirm-password" required minlength="6">
+                            <input type="password" id="confirm-password" required minlength="8">
                         </div>
                         <button type="submit" class="btn btn-primary">Change Password</button>
                     </form>
@@ -490,7 +490,19 @@
             }
             
             if (!response.ok) {
-                throw new Error(data.detail || 'Request failed');
+                // Handle validation errors (422) which return an array
+                let errorMessage = 'Request failed';
+                if (data.detail) {
+                    if (typeof data.detail === 'string') {
+                        errorMessage = data.detail;
+                    } else if (Array.isArray(data.detail)) {
+                        // Pydantic validation errors
+                        errorMessage = data.detail.map(e => e.msg || e.message || String(e)).join(', ');
+                    } else {
+                        errorMessage = String(data.detail);
+                    }
+                }
+                throw new Error(errorMessage);
             }
             
             return data;
@@ -775,8 +787,8 @@
                     throw new Error('New passwords do not match');
                 }
                 
-                if (newPassword.length < 6) {
-                    throw new Error('Password must be at least 6 characters');
+                if (newPassword.length < 8) {
+                    throw new Error('Password must be at least 8 characters');
                 }
                 
                 const data = await apiCall('/auth/change-password', {
